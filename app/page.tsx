@@ -209,9 +209,6 @@ export default function InterfestLandingPage() {
               Join us for an enchanting experience where technology meets magic, and where your skills can shine in our mystical challenges.
             </p>
           </motion.div>
-          {[...Array(20)].map((_, i) => (
-            <MagicSparkle key={i} />
-          ))}
         </section>
 
         <section id="competitions" className="py-12 md:py-24 p-4 md:p-6 bg-gradient-to-b from-[#1E0B3B] to-[#0B0B3B] relative overflow-hidden">
