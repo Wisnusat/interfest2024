@@ -53,11 +53,13 @@ export default function InterfestLandingPage() {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
 
   useEffect(() => {
-    const handleMouseMove = (e: any) => {
-      setCursorPosition({ x: e.clientX, y: e.clientY })
+    if (typeof window !== 'undefined') {
+      const handleMouseMove = (e: any) => {
+        setCursorPosition({ x: e.clientX, y: e.clientY })
+      }
+      window.addEventListener('mousemove', handleMouseMove)
+      return () => window.removeEventListener('mousemove', handleMouseMove)
     }
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
   const competitions = [
@@ -137,7 +139,7 @@ export default function InterfestLandingPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 2 }}
           >
-            {[...Array(50)].map((_, i) => (
+            {[...Array(50)].map((_, i) => typeof window !== 'undefined' && (
               <motion.div
                 key={i}
                 className="absolute"
@@ -157,7 +159,7 @@ export default function InterfestLandingPage() {
                   delay: Math.random() * 2,
                 }}
               >
-                <StarIcon className="text-[#FFD700] w-4 h-4" />
+                <StarIcon className="text-[#FFD700] w-5 h-5" />
               </motion.div>
             ))}
           </motion.div>
