@@ -110,7 +110,7 @@ export default function InterfestLandingPage() {
       />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-[#FFD700] transform-origin-0" style={{ scaleX }} />
       
-      <header className="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-40 bg-[#0B0B3B] bg-opacity-80 backdrop-blur-md">
+      <header className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 bg-[#0B0B3B] bg-opacity-80 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -123,16 +123,16 @@ export default function InterfestLandingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <ul className="flex space-x-6">
+          <ul className="flex space-x-4 md:space-x-6">
             <li><Link href="#" className="text-[#FFD700] transition-colors">Home</Link></li>
-            <li><Link href="#competitions" className="hover:text-[#FFD700] transition-colors">Competitions</Link></li>
-            <li><Link href="#register" className="hover:text-[#FFD700] transition-colors">Register</Link></li>
+            <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Competitions</Link></li>
+            <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Register</Link></li>
           </ul>
         </motion.nav>
       </header>
 
       <main>
-        <section className="h-screen flex flex-col justify-center items-center p-6 relative bg-gradient-to-b from-[#0B0B3B] to-[#1E0B3B] overflow-hidden">
+        <section className="min-h-screen flex flex-col justify-center items-center p-4 md:p-6 relative bg-gradient-to-b from-[#0B0B3B] to-[#1E0B3B] overflow-hidden">
           <motion.div
             className="absolute inset-0 overflow-hidden"
             initial={{ opacity: 0 }}
@@ -165,7 +165,7 @@ export default function InterfestLandingPage() {
           </motion.div>
           <FloatingIcon icon={WandIcon} className="top-20 left-20" />
           <motion.h1
-            className="text-6xl sm:text-8xl font-bold mb-6 text-center relative z-10"
+            className="text-4xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6 text-center relative z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -175,7 +175,7 @@ export default function InterfestLandingPage() {
             </span>
           </motion.h1>
           <motion.p
-            className="text-xl sm:text-2xl text-center max-w-2xl mb-8 relative z-10"
+            className="text-lg md:text-xl lg:text-2xl text-center max-w-2xl mb-6 md:mb-8 relative z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -194,18 +194,18 @@ export default function InterfestLandingPage() {
           </motion.div>
         </section>
 
-        <section id="about" className="min-h-screen flex flex-col justify-center p-6 bg-[#1E0B3B] relative overflow-hidden">
+        <section id="about" className="py-12 md:py-24 flex flex-col justify-center p-4 md:p-6 bg-[#1E0B3B] relative overflow-hidden">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="max-w-4xl mx-auto relative z-10"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-[#FFD700]">About Interfest</h2>
-            <p className="text-lg sm:text-xl mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 text-[#FFD700]">About Interfest</h2>
+            <p className="text-base md:text-lg lg:text-xl mb-4 md:mb-6">
               Interfest is Telkom University's premier tech competition, bringing together the brightest minds in a celebration of innovation and creativity.
             </p>
-            <p className="text-lg sm:text-xl">
+            <p className="text-base md:text-lg lg:text-xl">
               Join us for an enchanting experience where technology meets magic, and where your skills can shine in our mystical challenges.
             </p>
           </motion.div>
@@ -214,9 +214,9 @@ export default function InterfestLandingPage() {
           ))}
         </section>
 
-        <section id="competitions" className="min-h-screen p-6 bg-gradient-to-b from-[#1E0B3B] to-[#0B0B3B] relative overflow-hidden">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-center text-[#FFD700] relative z-10">Magical Competitions</h2>
-          <div className="max-w-4xl mx-auto grid gap-8 md:grid-cols-3 relative z-10">
+        <section id="competitions" className="py-12 md:py-24 p-4 md:p-6 bg-gradient-to-b from-[#1E0B3B] to-[#0B0B3B] relative overflow-hidden">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-[#FFD700] relative z-10">Magical Competitions</h2>
+          <div className="max-w-4xl mx-auto grid gap-6 md:gap-8 md:grid-cols-3 relative z-10">
             {competitions.map((comp, index) => (
               <motion.div
                 key={comp.title}
@@ -239,9 +239,9 @@ export default function InterfestLandingPage() {
           <FloatingIcon icon={CodeIcon} className="bottom-20 right-20" />
         </section>
 
-        <section id="workshops" className="min-h-screen p-6 bg-gradient-to-b from-[#0B0B3B] to-[#1E0B3B] relative overflow-hidden">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-center text-[#FFD700] relative z-10">Enchanting Workshops</h2>
-          <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-2 relative z-10">
+        <section id="workshops" className="py-12 md:py-24 p-4 md:p-6 bg-gradient-to-b from-[#0B0B3B] to-[#1E0B3B] relative overflow-hidden">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-[#FFD700] relative z-10">Enchanting Workshops</h2>
+          <div className="max-w-6xl mx-auto grid gap-6 md:gap-8 md:grid-cols-2 relative z-10">
             {workshops.map((workshop, index) => (
               <motion.div
                 key={workshop.title}
@@ -265,9 +265,9 @@ export default function InterfestLandingPage() {
           <FloatingIcon icon={UsersIcon} className="bottom-20 right-20" />
         </section>
 
-        <section id="sponsors" className="min-h-screen p-6 flex flex-col justify-center bg-[#0B0B3B] relative overflow-hidden">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-center text-[#FFD700] relative z-10">Our Magical Sponsors</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-4xl mx-auto relative z-10">
+        <section id="sponsors" className="py-12 md:py-24 p-4 md:p-6 flex flex-col justify-center bg-[#0B0B3B] relative overflow-hidden">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-[#FFD700] relative z-10">Our Magical Sponsors</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto relative z-10">
             {sponsors.map((sponsor, i) => (
               <motion.div
                 key={sponsor.name}
@@ -275,7 +275,8 @@ export default function InterfestLandingPage() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                <Card className="flex flex-col items-center justify-center p-4 bg-[#2D1B4E] border-[#FFD700] border h-full">
+                <Card className="flex flex-col items-center justify-center p-4 bg-[#2D1B4E] border-[#FFD700]
+                border h-full">
                   <sponsor.icon className="h-12 w-12 mb-4 text-[#FFD700]" />
                   <h3 className="text-center text-[#FFD700]">{sponsor.name}</h3>
                 </Card>
@@ -285,20 +286,20 @@ export default function InterfestLandingPage() {
           <FloatingIcon icon={SparklesIcon} className="top-20 left-20" />
         </section>
 
-        <section id="media-partners" className="min-h-screen p-6 flex flex-col justify-center bg-gradient-to-b from-[#1E0B3B] to-[#0B0B3B] relative overflow-hidden">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-center text-[#FFD700] relative z-10">Media Partners</h2>
-          <div className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto relative z-10">
+        <section id="media-partners" className="py-12 md:py-24 p-4 md:p-6 flex flex-col justify-center bg-gradient-to-b from-[#1E0B3B] to-[#0B0B3B] relative overflow-hidden">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-[#FFD700] relative z-10">Media Partners</h2>
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-4xl mx-auto relative z-10">
             {mediaPartners.map((partner, i) => (
               <motion.div
                 key={partner.name}
                 initial={{ opacity: 0, rotate: -10 }}
                 whileInView={{ opacity: 1, rotate: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="w-48 h-48"
+                className="w-36 h-36 md:w-48 md:h-48"
               >
                 <div className="bg-[#2D1B4E] border-4 border-[#FFD700] rounded-full w-full h-full flex flex-col items-center justify-center p-4 transform hover:scale-110 transition-transform duration-300">
-                  <partner.icon className="h-16 w-16 mb-2 text-[#FFD700]" />
-                  <h3 className="text-center text-[#FFD700] text-sm">{partner.name}</h3>
+                  <partner.icon className="h-12 w-12 md:h-16 md:w-16 mb-2 text-[#FFD700]" />
+                  <h3 className="text-center text-[#FFD700] text-xs md:text-sm">{partner.name}</h3>
                 </div>
               </motion.div>
             ))}
@@ -307,14 +308,14 @@ export default function InterfestLandingPage() {
         </section>
       </main>
 
-      <footer className="bg-[#1E0B3B] text-white py-8 px-6 relative overflow-hidden">
+      <footer className="bg-[#1E0B3B] text-white py-6 md:py-8 px-4 md:px-6 relative overflow-hidden">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center relative z-10">
           <div className="mb-4 sm:mb-0">
             <WandIcon className="h-8 w-8 mb-2 text-[#FFD700]" />
-            <p className="text-sm">© 2023 Interfest. All rights reserved.</p>
+            <p className="text-sm">© 2024 Interfest. All rights reserved.</p>
           </div>
           <nav>
-            <ul className="flex space-x-6">
+            <ul className="flex space-x-4 md:space-x-6">
               <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Privacy</Link></li>
               <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Terms</Link></li>
               <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Contact</Link></li>
