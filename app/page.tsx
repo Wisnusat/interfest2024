@@ -208,7 +208,7 @@ export default function InterfestLandingPage() {
             </p>
           </motion.div>
           {[...Array(20)].map((_, i) => (
-            <MagicSparkle key={i} style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%` }} />
+            <MagicSparkle key={i} />
           ))}
         </section>
 
@@ -320,7 +320,7 @@ export default function InterfestLandingPage() {
           </nav>
         </div>
         {[...Array(10)].map((_, i) => (
-          <MagicSparkle key={i} style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%` }} />
+          <MagicSparkle key={i} />
         ))}
       </footer>
     </div>
