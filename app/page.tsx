@@ -171,7 +171,7 @@ export default function InterfestLandingPage() {
             transition={{ duration: 0.8 }}
           >
             <span className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-transparent bg-clip-text">
-              Interfest 2023
+              Interfest 2024
             </span>
           </motion.h1>
           <motion.p
