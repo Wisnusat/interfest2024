@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WandIcon, ShieldIcon, CodeIcon, SparklesIcon, StarIcon, NewspaperIcon, GlobeIcon, BookOpenIcon, UsersIcon } from "lucide-react"
 import Link from "next/link"
+import Header from '@/components/ui/header'
 
 const FloatingIcon = ({ icon: Icon, ...props }: any) => (
   <motion.div
@@ -84,9 +85,6 @@ export default function InterfestLandingPage() {
 
   const workshops = [
     { title: "Mastering the Art of UI Enchantment", icon: WandIcon, description: "Learn to create captivating user interfaces that leave users spellbound." },
-    { title: "Cybersecurity Spells and Incantations", icon: ShieldIcon, description: "Discover powerful techniques to ward off digital threats and protect your realm." },
-    { title: "Algorithmic Sorcery", icon: CodeIcon, description: "Unlock the secrets of crafting efficient algorithms to solve complex magical problems." },
-    { title: "The Alchemy of Innovation", icon: SparklesIcon, description: "Transform your ideas into groundbreaking innovations through the magic of technology." },
   ]
 
   return (
@@ -110,26 +108,7 @@ export default function InterfestLandingPage() {
       />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-[#FFD700] transform-origin-0" style={{ scaleX }} />
       
-      <header className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 bg-[#0B0B3B] bg-opacity-80 backdrop-blur-md">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <WandIcon className="h-8 w-8 text-[#FFD700]" />
-        </motion.div>
-        <motion.nav
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <ul className="flex space-x-4 md:space-x-6">
-            <li><Link href="#" className="text-[#FFD700] transition-colors">Home</Link></li>
-            <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Competitions</Link></li>
-            <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Register</Link></li>
-          </ul>
-        </motion.nav>
-      </header>
+      <Header />
 
       <main>
         <section className="min-h-screen flex flex-col justify-center items-center p-4 md:p-6 relative bg-gradient-to-b from-[#0B0B3B] to-[#1E0B3B] overflow-hidden">
