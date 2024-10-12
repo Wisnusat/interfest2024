@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { WandIcon, UserIcon, UsersIcon, FileTextIcon, CheckIcon, SparklesIcon, StarIcon, ShareIcon } from "lucide-react"
 import Header from '@/components/ui/header'
 
@@ -71,15 +72,51 @@ export default function RegistrationForm() {
     member1Name: '',
     member1Email: '',
     member1Whatsapp: '',
+    member1NIM: '',
+    member1Semester: '',
+    member1Institution: '',
+    member1Faculty: '',
+    member1Program: '',
+    member1CV: null,
+    member1KSM: null,
+    member1Photo: null,
+    member1KTM: null,
     member2Name: '',
     member2Email: '',
     member2Whatsapp: '',
+    member2NIM: '',
+    member2Semester: '',
+    member2Institution: '',
+    member2Faculty: '',
+    member2Program: '',
+    member2CV: null,
+    member2KSM: null,
+    member2Photo: null,
+    member2KTM: null,
     member3Name: '',
     member3Email: '',
     member3Whatsapp: '',
+    member3NIM: '',
+    member3Semester: '',
+    member3Institution: '',
+    member3Faculty: '',
+    member3Program: '',
+    member3CV: null,
+    member3KSM: null,
+    member3Photo: null,
+    member3KTM: null,
     paymentEvident: null,
     socialMediaEvident: null,
-    agreeTerms: false
+    socialMediaLink1: '',
+    socialMediaLink2: '',
+    socialMediaLink3: '',
+    agreeTerms: false,
+    linkUpTwibbonAnggota1: '',
+    linkUpTwibbonAnggota2: '',
+    linkUpTwibbonAnggota3: '',
+    ssShareKe3GroupAnggota1: null,
+    ssShareKe3GroupAnggota2: null,
+    ssShareKe3GroupAnggota3: null
   })
 
   useEffect(() => {
@@ -98,14 +135,16 @@ export default function RegistrationForm() {
     { title: "Confirmation", icon: CheckIcon }
   ]
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev: any) => ({ ...prev, [name]: value }))
   }
 
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target
-    setFormData((prev: any) => ({ ...prev, [name]: files[0] }))
+    if (files) {
+      setFormData((prev: any) => ({ ...prev, [name]: files[0] }))
+    }
   }
 
   const handleNext = () => {
@@ -127,24 +166,16 @@ export default function RegistrationForm() {
       case 0:
         return (
           <>
-            <div className="space-y-4">
-              <Label htmlFor="teamName">Team Name</Label>
+            <div className="space-y-2">
+              <Label htmlFor="teamName">Nama Tim</Label>
               <Input id="teamName" name="teamName" value={formData.teamName} onChange={handleInputChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
             </div>
-            <div className="space-y-4">
-              <Label htmlFor="leaderName">Team Leader Name</Label>
+            <div className="space-y-2">
+              <Label htmlFor="leaderName">Nama Ketua Tim</Label>
               <Input id="leaderName" name="leaderName" value={formData.leaderName} onChange={handleInputChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
             </div>
-            <div className="space-y-4">
-              <Label htmlFor="leaderEmail">Team Leader Email</Label>
-              <Input id="leaderEmail" name="leaderEmail" type="email" value={formData.leaderEmail} onChange={handleInputChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
-            </div>
-            <div className="space-y-4">
-              <Label htmlFor="leaderWhatsapp">Team Leader WhatsApp</Label>
-              <Input id="leaderWhatsapp" name="leaderWhatsapp" value={formData.leaderWhatsapp} onChange={handleInputChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
-            </div>
-            <div className="space-y-4">
-              <Label htmlFor="competition">Competition</Label>
+            <div className="space-y-2">
+              <Label htmlFor="competition">Lomba Yang Diikuti</Label>
               <Select name="competition" onValueChange={(value) => setFormData((prev: any) => ({ ...prev, competition: value }))} required>
                 <SelectTrigger className="bg-[#1E0B3B] border-[#FFD700] text-gray-100">
                   <SelectValue placeholder="Select competition" />
@@ -168,8 +199,8 @@ export default function RegistrationForm() {
             </TabsList>
             {['member1', 'member2', 'member3'].map((member, index) => (
               <TabsContent key={member} value={member}>
-                <div className="space-y-4">
-                  <Label htmlFor={`${member}Name`}>Name</Label>
+                <div className="space-y-2">
+                  <Label htmlFor={`${member}Name`}>Nama Anggota</Label>
                   <Input 
                     id={`${member}Name`} 
                     name={`${member}Name`} 
@@ -179,8 +210,8 @@ export default function RegistrationForm() {
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
                 </div>
-                <div className="space-y-4">
-                  <Label htmlFor={`${member}Email`}>Email</Label>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}Email`}>Email Aktif</Label>
                   <Input 
                     id={`${member}Email`} 
                     name={`${member}Email`} 
@@ -191,13 +222,118 @@ export default function RegistrationForm() {
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
                 </div>
-                <div className="space-y-4">
-                  <Label htmlFor={`${member}Whatsapp`}>WhatsApp Number</Label>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}Whatsapp`}>Nomor Telepon</Label>
                   <Input 
                     id={`${member}Whatsapp`} 
                     name={`${member}Whatsapp`} 
                     value={formData[`${member}Whatsapp`]} 
                     onChange={handleInputChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}NIM`}>NIM</Label>
+                  <Input 
+                    id={`${member}NIM`} 
+                    name={`${member}NIM`} 
+                    value={formData[`${member}NIM`]} 
+                    onChange={handleInputChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label>Semester</Label>
+                  <RadioGroup
+                    name={`${member}Semester`}
+                    value={formData[`${member}Semester`]}
+                    onValueChange={(value) => setFormData((prev: any) => ({ ...prev, [`${member}Semester`]: value }))}
+                    className="flex space-x-2"
+                  >
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                      <div key={sem} className="flex items-center space-x-2">
+                        <RadioGroupItem value={sem.toString()} id={`${member}Semester${sem}`} />
+                        <Label htmlFor={`${member}Semester${sem}`}>{sem}</Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}Institution`}>Asal Institusi</Label>
+                  <Input 
+                    id={`${member}Institution`} 
+                    name={`${member}Institution`} 
+                    value={formData[`${member}Institution`]} 
+                    onChange={handleInputChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}Faculty`}>Fakultas</Label>
+                  <Input 
+                    id={`${member}Faculty`} 
+                    name={`${member}Faculty`} 
+                    value={formData[`${member}Faculty`]} 
+                    onChange={handleInputChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}Program`}>Program Studi</Label>
+                  <Input 
+                    id={`${member}Program`} 
+                    name={`${member}Program`} 
+                    value={formData[`${member}Program`]} 
+                    onChange={handleInputChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}CV`}>CV</Label>
+                  <Input 
+                    id={`${member}CV`} 
+                    name={`${member}CV`} 
+                    type="file" 
+                    onChange={handleFileChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}KSM`}>KSM</Label>
+                  <Input 
+                    id={`${member}KSM`} 
+                    name={`${member}KSM`} 
+                    type="file" 
+                    onChange={handleFileChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}Photo`}>Pas Foto</Label>
+                
+                  <Input 
+                    id={`${member}Photo`} 
+                    name={`${member}Photo`} 
+                    type="file" 
+                    onChange={handleFileChange} 
+                    required={index === 0} 
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                  />
+                </div>
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor={`${member}KTM`}>KTM</Label>
+                  <Input 
+                    id={`${member}KTM`} 
+                    name={`${member}KTM`} 
+                    type="file" 
+                    onChange={handleFileChange} 
                     required={index === 0} 
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
@@ -208,22 +344,86 @@ export default function RegistrationForm() {
         )
       case 2:
         return (
-          <div className="space-y-4">
+          <div className="space-y-2">
             <Label htmlFor="paymentEvident">Upload Payment Evidence</Label>
             <Input id="paymentEvident" name="paymentEvident" type="file" onChange={handleFileChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
           </div>
         )
       case 3:
         return (
-          <div className="space-y-4">
-            <Label htmlFor="socialMediaEvident">Upload Social Media Follow Evidence</Label>
-            <Input id="socialMediaEvident" name="socialMediaEvident" type="file" onChange={handleFileChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
-          </div>
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="linkUpTwibbonAnggota1">Link up twibbon anggota 1</Label>
+              <Input 
+                id="linkUpTwibbonAnggota1" 
+                name="linkUpTwibbonAnggota1" 
+                value={formData.linkUpTwibbonAnggota1} 
+                onChange={handleInputChange} 
+                required 
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="linkUpTwibbonAnggota2">Link up twibbon anggota 2</Label>
+              <Input 
+                id="linkUpTwibbonAnggota2" 
+                name="linkUpTwibbonAnggota2" 
+                value={formData.linkUpTwibbonAnggota2} 
+                onChange={handleInputChange} 
+                required 
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="linkUpTwibbonAnggota3">Link up twibbon anggota 3</Label>
+              <Input 
+                id="linkUpTwibbonAnggota3" 
+                name="linkUpTwibbonAnggota3" 
+                value={formData.linkUpTwibbonAnggota3} 
+                onChange={handleInputChange} 
+                required 
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ssShareKe3GroupAnggota1">SS SHARE KE 3 GROUP ANGGOTA 1</Label>
+              <Input 
+                id="ssShareKe3GroupAnggota1" 
+                name="ssShareKe3GroupAnggota1" 
+                type="file" 
+                onChange={handleFileChange} 
+                required 
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ssShareKe3GroupAnggota2">SS SHARE KE 3 GROUP ANGGOTA 2</Label>
+              <Input 
+                id="ssShareKe3GroupAnggota2" 
+                name="ssShareKe3GroupAnggota2" 
+                type="file" 
+                onChange={handleFileChange} 
+                required 
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ssShareKe3GroupAnggota3">SS SHARE KE 3 GROUP ANGGOTA 3</Label>
+              <Input 
+                id="ssShareKe3GroupAnggota3" 
+                name="ssShareKe3GroupAnggota3" 
+                type="file" 
+                onChange={handleFileChange} 
+                required 
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+            </div>
+          </>
         )
       case 4:
         return (
           <>
-            <div className="space-y-4">
+            <div className="space-y-2">
               <h3 className="text-xl font-semibold text-[#FFD700]">Please review your information:</h3>
               <p>Team Name: {formData.teamName}</p>
               <p>Team Leader: {formData.leaderName}</p>
