@@ -2,13 +2,14 @@ import { motion } from 'framer-motion'
 import { WandIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import interfestImage from '../../app/assets/logo_interfest.png';
 
 function Header() {
   const pathname = usePathname();
   console.log(pathname)
 
   return (
-    <header className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 bg-opacity-80 backdrop-blur-md">
+    <header className="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-40 bg-opacity-80 backdrop-blur-md max-h-[3.5rem]">
         <Link href="/">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -16,8 +17,8 @@ function Header() {
             transition={{ duration: 0.5 }}
             className="flex items-center space-x-2"
           >
-            <WandIcon className="h-8 w-8 text-[#FFD700]" />
-            <span className="text-[#FFD700] font-bold text-xl">Interfest</span>
+            <img src={interfestImage.src} alt="Logo Interfest" className="h-14 w-14 flex-shrink-0" />
+            <span className="silver-stone-font text-[#FFD700] font-bold text-3xl">Interfest 2024</span>
           </motion.div>
         </Link>
         <motion.nav
