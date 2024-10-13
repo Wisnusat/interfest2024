@@ -37,6 +37,11 @@ function Header() {
               </Link>
             </li>
             <li>
+              <Link href="/register" className={`hover:text-[#FFD700] transition-colors ${pathname === '/workshop' ? 'text-[#FFD700]' : 'text-gray-100'}`}>
+                Workshop
+              </Link>
+            </li>
+            <li>
               <Link href="/register" className={`hover:text-[#FFD700] transition-colors ${pathname === '/register' ? 'text-[#FFD700]' : 'text-gray-100'}`}>
                 Register
               </Link>
