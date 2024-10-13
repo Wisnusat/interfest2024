@@ -160,13 +160,17 @@ export default function OpenCompetitionsPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500]">
-              Begin Your Magical Journey
-            </Button>
-            <Button size="lg" className="text-lg bg-[#0B0B3B] text-[#FFD700] border-2 border-[#FFD700] hover:bg-[#1E0B3B]">
-              <DownloadIcon className="mr-2 h-5 w-5" />
-              Download Guidebook
-            </Button>
+            <Link className="z-20" href="/register">
+                <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500]">
+                  Begin Your Magical Journey
+                </Button>
+            </Link>
+            <Link className="z-20" href="https://drive.google.com/drive/folders/1ge31AkJ7r2tfbNIDoC10AW--Pa-CfTDj?usp=sharing" target='_blank'>
+                <Button size="lg" className="text-lg bg-[#0B0B3B] text-[#FFD700] border-2 border-[#FFD700] hover:bg-[#1E0B3B]">
+                  <DownloadIcon className="mr-2 h-5 w-5" />
+                  Download Guidebook
+                </Button>
+            </Link>
           </motion.div>
         </section>
 
