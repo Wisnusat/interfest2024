@@ -84,8 +84,7 @@ export default function InterfestLandingPage() {
   ]
 
   const workshops = [
-    { title: "Mastering the Art of UI Enchantment", icon: WandIcon, description: "Learn to create captivating user interfaces that leave users spellbound." },
-  ]
+    { title: " Frontend Fundamentals: Code Your Way to the Top", icon: WandIcon, description: "merupakan rangkaian kegiatan workshop yang dirancang untuk pemula yang ingin memiliki kemampuan Frontend developer dan memberikan pengalaman komprehensif dan mendalam." },]
 
   return (
     <div className="bg-[#0B0B3B] text-white min-h-screen font-sans overflow-x-hidden">
@@ -167,9 +166,11 @@ export default function InterfestLandingPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="relative z-10"
           >
-            <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500]">
-              Register Now
-            </Button>
+            <Link href="/register">
+              <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500]">
+                Register Now
+              </Button>
+            </Link>
           </motion.div>
         </section>
 

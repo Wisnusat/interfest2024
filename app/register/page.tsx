@@ -11,6 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { WandIcon, UserIcon, UsersIcon, FileTextIcon, CheckIcon, SparklesIcon, StarIcon, ShareIcon } from "lucide-react"
 import Header from '@/components/ui/header'
+import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/hooks/use-toast'
 
 const FloatingIcon = ({ icon: Icon, ...props }: any) => (
   <motion.div
@@ -58,16 +60,17 @@ const StepIcon = ({ icon: Icon, isActive, isCompleted }: any) => (
 )
 
 export default function RegistrationForm() {
+  const router = useRouter()
+  const { toast } = useToast()
   const [currentStep, setCurrentStep] = useState(0)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+  const [loading, setLoading] = useState(false);
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
 
   const [formData, setFormData] = useState<any>({
     teamName: '',
     leaderName: '',
-    leaderEmail: '',
-    leaderWhatsapp: '',
     competition: '',
     member1Name: '',
     member1Email: '',
@@ -155,11 +158,74 @@ export default function RegistrationForm() {
     if (currentStep > 0) setCurrentStep(currentStep - 1)
   }
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Here you would typically send the data to your server
-  }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Prepare to upload files and get their URLs
+    const fileFields = [
+      'member1CV', 'member1KSM', 'member1Photo', 'member1KTM',
+      'member2CV', 'member2KSM', 'member2Photo', 'member2KTM',
+      'member3CV', 'member3KSM', 'member3Photo', 'member3KTM',
+      'paymentEvident', 'ssShareKe3GroupAnggota1', 'ssShareKe3GroupAnggota2', 'ssShareKe3GroupAnggota3'
+    ];
+
+    // Create a copy of the current formData to update with URLs
+    const updatedFormData = { ...formData };
+
+    // Upload files and update formData with URLs
+    for (const field of fileFields) {
+      if (formData[field]) {
+        const fileData = new FormData();
+        fileData.append('file', formData[field]);
+
+        // console.log(formData[field]);
+        // Upload the file to Google Drive (or your server)
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: fileData,
+        });
+
+        if (uploadResponse.ok) {
+          const uploadResult = await uploadResponse.json();
+          updatedFormData[field] = uploadResult.viewLink; // Assuming the response contains the file URL
+          console.log('success upload file')
+        } else {
+            toast({
+                title: `Error uploading ${field}`,
+                description: uploadResponse.statusText || "",
+            })
+        }
+      }
+    }
+
+    // Now, updatedFormData contains the URLs for the uploaded files
+    // You can send the updated form data to your Google Apps Script
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_SHEET_URL || '', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: JSON.stringify(updatedFormData), // Use FormData directly
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      router.push("/success")
+      // Handle success message here, e.g., show a success notification or redirect
+    } catch (error: any) {
+        toast({
+            title: "Error submit form",
+            description: error?.message || "",
+        })
+    } finally {
+        setLoading(false); // Step 3: Set loading to false after processing
+    }
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -429,7 +495,6 @@ export default function RegistrationForm() {
               <p>Team Leader: {formData.leaderName}</p>
               <p>Competition: {formData.competition}</p>
               <p>Payment Evidence: {formData.paymentEvident ? formData.paymentEvident.name : 'Not uploaded'}</p>
-              <p>Social Media Evidence: {formData.socialMediaEvident ? formData.socialMediaEvident.name : 'Not uploaded'}</p>
             </div>
             <div className="flex items-center space-x-2 mt-4">
               <Checkbox 
@@ -510,9 +575,13 @@ export default function RegistrationForm() {
               <Button 
                 type="submit" 
                 className="bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
-                disabled={!formData.agreeTerms}
+                disabled={!formData.agreeTerms || loading}
               >
-                Submit Registration
+                {loading ? (
+                  <span className="loader"></span> // Step 4: Show loader
+                ) : (
+                  'Submit Registration'
+                )}
               </Button>
             ) : (
               <Button 

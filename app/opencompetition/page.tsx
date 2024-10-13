@@ -81,23 +81,6 @@ export default function OpenCompetitionsPage() {
     },
   ]
 
-  const handleDownloadGuidebook = () => {
-    // This is a placeholder function. In a real application, you would implement
-    // the actual download logic here, possibly fetching the file from a server.
-    console.log("Downloading competition guidebook...")
-    // For demonstration purposes, we'll create a dummy download
-    const dummyData = "This is the competition guidebook content."
-    const blob = new Blob([dummyData], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'competition_guidebook.txt'
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
-
   return (
     <div className="bg-gradient-to-b from-[#0B0B3B] via-[#1E0B3B] to-[#0B0B3B] text-white min-h-screen font-sans overflow-x-hidden">
       <motion.div
@@ -180,7 +163,7 @@ export default function OpenCompetitionsPage() {
             <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500]">
               Begin Your Magical Journey
             </Button>
-            <Button size="lg" className="text-lg bg-[#0B0B3B] text-[#FFD700] border-2 border-[#FFD700] hover:bg-[#1E0B3B]" onClick={handleDownloadGuidebook}>
+            <Button size="lg" className="text-lg bg-[#0B0B3B] text-[#FFD700] border-2 border-[#FFD700] hover:bg-[#1E0B3B]">
               <DownloadIcon className="mr-2 h-5 w-5" />
               Download Guidebook
             </Button>
@@ -206,9 +189,11 @@ export default function OpenCompetitionsPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-white">{comp.details}</p>
-                    <Button className="mt-6 bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300">
-                      Join the {comp.title} Quest
-                    </Button>
+                    <Link href="/register">
+                        <Button className="mt-6 bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300">
+                          Join the {comp.title} Quest
+                        </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -239,9 +224,11 @@ export default function OpenCompetitionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300">
-                Embark on Your INTERFEST 2024 Adventure
-              </Button>
+            <Link href="/register">
+                <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300">
+                  Embark on Your INTERFEST 2024 Adventure
+                </Button>
+            </Link>
             </motion.div>
           </div>
           {[...Array(20)].map((_, i) => (
