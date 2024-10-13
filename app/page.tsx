@@ -93,7 +93,7 @@ export default function InterfestLandingPage() {
     const ImagesL = [
       ...(window.innerWidth > 768 ? [
         { src: kualiImage.src, alt: "Kuali", position: { left: '5.5rem', bottom: '5rem' }, rotate: 0, scale: 'w-48 h-48', animate: !disableAnimation },
-        { src: pedangImage.src, alt: "Pedang", position: { left: '15.5rem', bottom: '35rem' }, rotate: 0, scale: 'w-64 h-64', animate: !disableAnimation },
+        { src: pedangImage.src, alt: "Pedang", position: { left: '10.5rem', bottom: '30rem' }, rotate: 0, scale: 'w-48 h-48', animate: !disableAnimation },
       ] : []),
       // Gambar khusus untuk mobile
       ...(window.innerWidth <= 768 ? [
