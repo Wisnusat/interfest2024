@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { WandIcon, ShieldIcon, CodeIcon, SparklesIcon, StarIcon, NewspaperIcon, GlobeIcon, BookOpenIcon, UsersIcon } from "lucide-react"
+import { WandIcon, ShieldIcon, CodeIcon, SparklesIcon, StarIcon, NewspaperIcon, GlobeIcon, BookOpenIcon, UsersIcon, DownloadIcon } from "lucide-react"
 import Link from "next/link"
 import Header from '@/components/ui/header'
 
@@ -332,6 +332,14 @@ export default function InterfestLandingPage() {
                 </Card>
               </motion.div>
             ))}
+            <div className='flex justify-center'>
+              <Link href="https://drive.google.com/drive/folders/1ge31AkJ7r2tfbNIDoC10AW--Pa-CfTDj?usp=sharing" target='_blank'>
+                <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500]">
+                  <DownloadIcon className="mr-2 h-5 w-5" />
+                  Download Guidebook
+                </Button>
+              </Link>
+            </div>
           </div>
           <FloatingIcon icon={CodeIcon} className="bottom-20 right-20" />
         </section>
