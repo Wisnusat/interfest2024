@@ -7,6 +7,10 @@
   --foreground: #171717;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -14,10 +18,20 @@
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+body {	
+	background: linear-gradient(to bottom, #0B0B3B, #1E0B3B);
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+body:before{
+	content:'';
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	z-index: -1;
+	background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.058), #1E0B3B 65%);
 }
 
 @layer utilities {
@@ -38,4 +52,15 @@ body {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@font-face {
+  font-family: 'SilverStoneFont';
+  src: url('./fonts/silverStoneRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.silver-stone-font {
+  font-family: 'SilverStoneFont';
 }

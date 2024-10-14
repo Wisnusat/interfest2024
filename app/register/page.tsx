@@ -243,10 +243,10 @@ export default function RegistrationForm() {
             <div className="space-y-2">
               <Label htmlFor="competition">Lomba Yang Diikuti</Label>
               <Select name="competition" onValueChange={(value) => setFormData((prev: any) => ({ ...prev, competition: value }))} required>
-                <SelectTrigger className="bg-[#1E0B3B] border-[#FFD700] text-gray-100">
+                <SelectTrigger className="bg-[#2D1B4E] border-[#FFD700] text-gray-100">
                   <SelectValue placeholder="Select competition" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className='bg-white'>
                   <SelectItem value="competitive-programming">Competitive Programming</SelectItem>
                   <SelectItem value="capture-the-flag">Capture The Flag</SelectItem>
                   <SelectItem value="web-design">Web Design</SelectItem>
