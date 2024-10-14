@@ -452,7 +452,7 @@ export default function RegistrationForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="ssShareKe3GroupAnggota1">SS SHARE KE 3 GROUP ANGGOTA 1</Label>
+              <Label htmlFor="ssShareKe3GroupAnggota1">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 1)</Label>
               <Input 
                 id="ssShareKe3GroupAnggota1" 
                 name="ssShareKe3GroupAnggota1" 
@@ -463,7 +463,7 @@ export default function RegistrationForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="ssShareKe3GroupAnggota2">SS SHARE KE 3 GROUP ANGGOTA 2</Label>
+              <Label htmlFor="ssShareKe3GroupAnggota2">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 2)</Label>
               <Input 
                 id="ssShareKe3GroupAnggota2" 
                 name="ssShareKe3GroupAnggota2" 
@@ -474,7 +474,7 @@ export default function RegistrationForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="ssShareKe3GroupAnggota3">SS SHARE KE 3 GROUP ANGGOTA 3</Label>
+              <Label htmlFor="ssShareKe3GroupAnggota3">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 3)</Label>
               <Input 
                 id="ssShareKe3GroupAnggota3" 
                 name="ssShareKe3GroupAnggota3" 
