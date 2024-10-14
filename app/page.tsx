@@ -7,18 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WandIcon, ShieldIcon, CodeIcon, SparklesIcon, StarIcon, NewspaperIcon, GlobeIcon, BookOpenIcon, UsersIcon } from "lucide-react"
 import Link from "next/link"
 import Header from '@/components/ui/header'
-import bukuImage from './assets/buku.webp';
-import akarImage from './assets/akar.png';
-import awanImage from './assets/awan.svg';
-import kucingImage from './assets/kucing.png';
-import kunciImage from "./assets/kunci.png";
-import kualiImage from "./assets/kuali_2.png";
-import siluetImage from "./assets/siluet_gedung.svg";
-import ifestImage from "./assets/logo_interfest.png";
-import himaImage from "./assets/logo_hima.png";
-import prodiImage from "./assets/logo_prodi.png";
-import pedangImage from "./assets/pedang.png";
-import telyuImage from "./assets/logo_telyu.png";
+
+// assets
+import * as assetsImages from './assets';
+// media-partner
+import { MediaPartners } from './assets/media-partner';
+// sponsors
+import { Sponsors } from './assets/sponsors';
 
 const FloatingIcon = ({ icon: Icon, ...props }: any) => (
   <motion.div
@@ -78,27 +73,27 @@ export default function InterfestLandingPage() {
   useEffect(() => {
     const ImagesR = [
       ...(window.innerWidth > 768 ? [
-        { src: bukuImage.src, alt: "Buku", position: { right: '5.5rem', bottom: '20rem' }, rotate: 0, scale: 'w-64 h-64', animate: !disableAnimation },
-        { src: kucingImage.src, alt: "Kucing", position: { right: '1rem', bottom: '0rem' }, rotate: 0, scale: 'w-16 h-24', animate: disableAnimation },
+        { src: assetsImages.bukuImage.src, alt: "Buku", position: { right: '5.5rem', bottom: '20rem' }, rotate: 0, scale: 'w-64 h-64', animate: !disableAnimation },
+        { src: assetsImages.kucingImage.src, alt: "Kucing", position: { right: '1rem', bottom: '0rem' }, rotate: 0, scale: 'w-16 h-24', animate: disableAnimation },
       ] : []),
       // Gambar khusus untuk mobile
       ...(window.innerWidth <= 768 ? [
-        // { src: akarImage.src, alt: "Buku Mobile 1", position: { right: '1rem', bottom: '2rem' }, rotate: 0, scale: 'w-24 h-24' }, 
-        // { src: bukuImage.src, alt: "Buku Mobile 2", position: { right: '3rem', bottom: '40rem' }, rotate: 0, scale: 'w-24 h-24', animate: !disableAnimation }, 
-        { src: kucingImage.src, alt: "Buku 2", position: { right: '1rem', bottom: '0rem' }, rotate: 0, scale: 'w-16 h-24', animate: disableAnimation },
+        // { src: assetsImages.akarImage.src, alt: "Buku Mobile 1", position: { right: '1rem', bottom: '2rem' }, rotate: 0, scale: 'w-24 h-24' }, 
+        // { src: assetsImages.bukuImage.src, alt: "Buku Mobile 2", position: { right: '3rem', bottom: '40rem' }, rotate: 0, scale: 'w-24 h-24', animate: !disableAnimation }, 
+        { src: assetsImages.kucingImage.src, alt: "Buku 2", position: { right: '1rem', bottom: '0rem' }, rotate: 0, scale: 'w-16 h-24', animate: disableAnimation },
       ] : []),
     ];
     setImagesR(ImagesR);
 
     const ImagesL = [
       ...(window.innerWidth > 768 ? [
-        { src: kualiImage.src, alt: "Kuali", position: { left: '5.5rem', bottom: '5rem' }, rotate: 0, scale: 'w-48 h-48', animate: !disableAnimation },
-        { src: pedangImage.src, alt: "Pedang", position: { left: '10.5rem', bottom: '30rem' }, rotate: 0, scale: 'w-48 h-48', animate: !disableAnimation },
+        { src: assetsImages.kualiImage.src, alt: "Kuali", position: { left: '5.5rem', bottom: '5rem' }, rotate: 0, scale: 'w-48 h-48', animate: !disableAnimation },
+        { src: assetsImages.pedangImage.src, alt: "Pedang", position: { left: '10.5rem', bottom: '30rem' }, rotate: 0, scale: 'w-48 h-48', animate: !disableAnimation },
       ] : []),
       // Gambar khusus untuk mobile
       ...(window.innerWidth <= 768 ? [
-        // { src: akarImage.src, alt: "Buku Mobile 1", position: { left: '1rem', bottom: '2rem' }, rotate: 0, scale: 'w-24 h-24' }, 
-        // { src: kualiImage.src, alt: "Buku Mobile 2", position: { left: '3rem', bottom: '4rem' }, rotate: 0, scale: 'w-24 h-24', animate: !disableAnimation }, 
+        // { src: assetsImages.akarImage.src, alt: "Buku Mobile 1", position: { left: '1rem', bottom: '2rem' }, rotate: 0, scale: 'w-24 h-24' }, 
+        // { src: assetsImages.kualiImage.src, alt: "Buku Mobile 2", position: { left: '3rem', bottom: '4rem' }, rotate: 0, scale: 'w-24 h-24', animate: !disableAnimation }, 
       ] : []),
     ];
     setImagesL(ImagesL);
@@ -121,20 +116,6 @@ export default function InterfestLandingPage() {
       description: "Unleash your creativity in the Open Competition, where participants are free to explore various fields of technology, from coding to design. Let your innovative ideas shine in this all-encompassing tech challenge."
     },
   ];
-
-  const sponsors = [
-    { name: "MagicTech", icon: WandIcon },
-    { name: "Spell Systems", icon: SparklesIcon },
-    { name: "Enchanted Innovations", icon: StarIcon },
-    { name: "Mystic Solutions", icon: ShieldIcon },
-  ]
-
-  const mediaPartners = [
-    { name: "Tech Chronicle", icon: NewspaperIcon },
-    { name: "Digital Realm", icon: GlobeIcon },
-    { name: "Code Casters", icon: CodeIcon },
-    { name: "Innovation Pulse", icon: SparklesIcon },
-  ]
 
   const workshops = [
     { title: " Frontend Fundamentals: Code Your Way to the Top", icon: WandIcon, description: "merupakan rangkaian kegiatan workshop yang dirancang untuk pemula yang ingin memiliki kemampuan Frontend developer dan memberikan pengalaman komprehensif dan mendalam." },]
@@ -197,7 +178,7 @@ export default function InterfestLandingPage() {
             ))}
           </motion.div>
           <motion.img
-            src={kunciImage.src}
+            src={assetsImages.kunciImage.src}
             alt="Akar"
             className="top-20 left-20 w-16 h-16"
             animate={{ y: [-10, -20, -10] }} // Menambahkan gerakan naik dan turun
@@ -209,7 +190,7 @@ export default function InterfestLandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="relative bg-cover bg-center h-full w-full" style={{ backgroundImage: `url(${siluetImage.src})` }}>
+            <div className="relative bg-cover bg-center h-full w-full" style={{ backgroundImage: `url(${assetsImages.siluetImage.src})` }}>
               <span className="silver-stone-font bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-transparent bg-clip-text text-[3.5rem] md:text-[7.5rem]">
                 INTERFEST
               </span>
@@ -290,7 +271,7 @@ export default function InterfestLandingPage() {
             transition={{ duration: 0.8 }}
             className="max-w-4xl mx-auto relative z-10"
           >
-            <img src={ifestImage.src} alt="Sponsor 3" className="h-32 w-32 my-5" />
+            <img src={assetsImages.ifestImage.src} alt="Sponsor 3" className="h-32 w-32 my-5" />
             <Link href="#about">
               <h2 className="silver-stone-font text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 text-[#FFD700]">About Interfest</h2>
             </Link>
@@ -302,30 +283,30 @@ export default function InterfestLandingPage() {
             </p>
             <div
               className="pt-10 flex flex-wrap justify-left">
-              <img src={telyuImage.src} alt="Sponsor 1" className="h-12 w-12 mr-2 rounded-full" />
-              <img src={himaImage.src} alt="Sponsor 3" className="h-12 w-12 mx-2" />
-              <img src={prodiImage.src} alt="Sponsor 2" className="h-12 w-12 mx-2" />
+              <img src={assetsImages.telyuImage.src} alt="Sponsor 1" className="h-12 w-12 mr-2 rounded-full" />
+              <img src={assetsImages.himaImage.src} alt="Sponsor 3" className="h-12 w-12 mx-2" />
+              <img src={assetsImages.prodiImage.src} alt="Sponsor 2" className="h-12 w-12 mx-2" />
             </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 2 }}
-            // className="max-w-4xl mx-auto relative z-10"
+          // className="max-w-4xl mx-auto relative z-10"
           >
-          <div className="absolute top-0 left-0 hidden md:block" style={{ transform: 'rotate(120deg)', left: '-6rem', top: '3rem' }}>
-            <img src={akarImage.src} alt="Akar" className="h-64 w-64" />
-          </div>
-          <div className="absolute top-0 right-0" style={{ transform: 'rotate(-130deg)', right: '-5rem', top: '3rem' }}>
-            <img src={akarImage.src} alt="Kunci" className="h-64 w-64" />
-          </div>
-          {/* <div className="absolute bottom-15 left-20" style={{ transform: 'rotate(20deg)', left: '7rem', top: '35rem' }}>
-            <img src={bukuImage.src} alt="Buku" className="h-64 w-64" />
-          </div> */}
-          <div className="absolute bottom-0 right-0" style={{ transform: 'rotate(20deg)', right: '7rem', top: '35rem' }}>
-              <img src={bukuImage.src} alt="Kucing" className="h-32 w-32" />
+            <div className="absolute top-0 left-0 hidden md:block" style={{ transform: 'rotate(120deg)', left: '-6rem', top: '3rem' }}>
+              <img src={assetsImages.akarImage.src} alt="Akar" className="h-64 w-64" />
             </div>
-            </motion.div>
+            <div className="absolute top-0 right-0" style={{ transform: 'rotate(-130deg)', right: '-5rem', top: '3rem' }}>
+              <img src={assetsImages.akarImage.src} alt="Kunci" className="h-64 w-64" />
+            </div>
+            {/* <div className="absolute bottom-15 left-20" style={{ transform: 'rotate(20deg)', left: '7rem', top: '35rem' }}>
+            <img src={assetsImages.bukuImage.src} alt="Buku" className="h-64 w-64" />
+          </div> */}
+            <div className="absolute bottom-0 right-0" style={{ transform: 'rotate(20deg)', right: '7rem', top: '35rem' }}>
+              <img src={assetsImages.bukuImage.src} alt="Kucing" className="h-32 w-32" />
+            </div>
+          </motion.div>
         </section>
 
         <section id="competitions" className="min-h-screen py-12 md:py-24 p-4 md:p-6 relative overflow-hidden">
@@ -388,18 +369,18 @@ export default function InterfestLandingPage() {
             <h2 className="silver-stone-font text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-[#FFD700] relative z-10">Our Magical Sponsors</h2>
           </Link>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto relative z-10">
-            {sponsors.map((sponsor, i) => (
+            {Sponsors.map((sponsor: { name: string; src: string }, i: number) => (
               <motion.div
                 key={sponsor.name}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="w-full h-auto md:w-48 md:h-48"
               >
-                <Card className="flex flex-col items-center justify-center p-4 bg-[#2D1B4E] border-[#FFD700]
-                border h-full">
-                  <sponsor.icon className="h-12 w-12 mb-4 text-[#FFD700]" />
-                  <h3 className="text-center text-[#FFD700]">{sponsor.name}</h3>
-                </Card>
+                <div className="bg-[#2D1B4E] w-full h-full flex flex-col items-center justify-center p-4 transform hover:scale-110 transition-transform duration-300">
+                  <img src={sponsor.src} alt={sponsor.name} className="h-12 w-auto md:h-16 mb-2" />
+                  <h3 className="text-center text-[#FFD700] text-xs md:text-sm font-bold uppercase mt-4">{sponsor.name}</h3>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -410,18 +391,18 @@ export default function InterfestLandingPage() {
           <Link href="#media-partners">
             <h2 className="silver-stone-font text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-[#FFD700] relative z-10">Media Partners</h2>
           </Link>
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-4xl mx-auto relative z-10">
-            {mediaPartners.map((partner, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mx-auto justify-center gap-6">
+            {MediaPartners.map((partner: { name: string; src: string }, i: number) => (
               <motion.div
                 key={partner.name}
                 initial={{ opacity: 0, rotate: -10 }}
                 whileInView={{ opacity: 1, rotate: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="w-36 h-36 md:w-48 md:h-48"
+                className="w-full h-auto md:w-48 md:h-48"
               >
-                <div className="bg-[#2D1B4E] border-4 border-[#FFD700] rounded-full w-full h-full flex flex-col items-center justify-center p-4 transform hover:scale-110 transition-transform duration-300">
-                  <partner.icon className="h-12 w-12 md:h-16 md:w-16 mb-2 text-[#FFD700]" />
-                  <h3 className="text-center text-[#FFD700] text-xs md:text-sm">{partner.name}</h3>
+                <div className="bg-[#2D1B4E] w-full h-full flex flex-col items-center justify-center p-4 transform hover:scale-110 transition-transform duration-300">
+                  <img src={partner.src} alt={partner.name} className="h-12 w-auto md:h-16 mb-2" />
+                  <h3 className="text-center text-[#FFD700] text-xs md:text-sm font-bold uppercase mt-4">{partner.name}</h3>
                 </div>
               </motion.div>
             ))}
