@@ -48,10 +48,10 @@ export const uploadToGooglDrive = async (file) => {
         }
 
         // Check if the file already exists in Google Drive
-        const existingFile = await findExistingFile(driveService, file.name);
-        if (existingFile) {
-            return { viewLink: existingFile.webViewLink, success: true };
-        }
+        // const existingFile = await findExistingFile(driveService, file.name);
+        // if (existingFile) {
+        //     return { viewLink: existingFile.webViewLink, success: true };
+        // }
 
         // Prepare file metadata and upload
         const fileMetadata = {
@@ -78,16 +78,6 @@ export const uploadToGooglDrive = async (file) => {
             requestBody: {
                 role: "reader",
                 type: "anyone",
-            },
-        });
-
-        // Add a writer permission for a specific user
-        await driveService.permissions.create({
-            fileId: docId,
-            requestBody: {
-                role: "writer",
-                type: "user",
-                emailAddress: "<your email address>", // Replace with the email to share
             },
         });
 

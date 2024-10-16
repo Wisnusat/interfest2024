@@ -41,8 +41,8 @@ body:before{
 }
 
 .loader {
-  border: 2px solid whitesmoke;
-  border-top: 2px solid whitesmoke; /* Loader color */
+  border: 2px solid white;
+  border-top: 2px solid white; /* Loader color */
   border-radius: 50%;
   width: 20px;
   height: 20px;

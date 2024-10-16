@@ -159,6 +159,10 @@ export default function RegistrationForm() {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    toast({
+      title: "Casting the spell of submission...",
+      description: "Please hold while the magic takes effect!"
+    })
     e.preventDefault();
     setLoading(true);
 
@@ -179,27 +183,38 @@ export default function RegistrationForm() {
         const fileData = new FormData();
         fileData.append('file', formData[field]);
 
-        // console.log(formData[field]);
-        // Upload the file to Google Drive (or your server)
-        const uploadResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: fileData,
-        });
+        let uploadResponse;
+        let attempts = 0;
+        const maxAttempts = 3; // Set the maximum number of retry attempts
 
-        if (uploadResponse.ok) {
-          const uploadResult = await uploadResponse.json();
-          updatedFormData[field] = uploadResult.viewLink; // Assuming the response contains the file URL
-          console.log('success upload file')
-        } else {
-            toast({
+        // Retry logic with exponential backoff
+        while (attempts < maxAttempts) {
+          uploadResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: fileData,
+          });
+
+          if (uploadResponse.ok) {
+            const uploadResult = await uploadResponse.json();
+            updatedFormData[field] = uploadResult.viewLink; // Assuming the response contains the file URL
+            console.log('success upload file');
+            break; // Exit the retry loop on success
+          } else {
+            attempts++;
+            if (attempts < maxAttempts) {
+              const delay = Math.pow(2, attempts) * 100; // Exponential backoff
+              await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
+            } else {
+              toast({
                 title: `Error uploading ${field}`,
                 description: uploadResponse.statusText || "",
-            })
+              });
+            }
+          }
         }
       }
     }
 
-    // Now, updatedFormData contains the URLs for the uploaded files
     // You can send the updated form data to your Google Apps Script
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_SHEET_URL || '', {
@@ -215,6 +230,7 @@ export default function RegistrationForm() {
       }
 
       const result = await response.json();
+      console.log('succcess register', updatedFormData);
       router.push("/success")
       // Handle success message here, e.g., show a success notification or redirect
     } catch (error: any) {
