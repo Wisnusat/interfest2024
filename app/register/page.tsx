@@ -67,7 +67,7 @@ export default function RegistrationForm() {
   const [loading, setLoading] = useState(false);
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
-
+  const [formErrors, setFormErrors] = useState<any>({});
   const [formData, setFormData] = useState<any>({
     teamName: '',
     leaderName: '',
@@ -141,22 +141,130 @@ export default function RegistrationForm() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev: any) => ({ ...prev, [name]: value }))
+    if (formErrors[name]) {
+      setFormErrors((prevErrors: any) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target
     if (files) {
       setFormData((prev: any) => ({ ...prev, [name]: files[0] }))
+      if (formErrors[name]) {
+        setFormErrors((prevErrors: any) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
     }
   }
 
   const handleNext = () => {
-    if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1)
+    if (validateFields()) {
+      if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1)
+    }
   }
 
   const handlePrev = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1)
   }
+
+  const validateFields = () => {
+    let errors: any = {};
+
+    if (currentStep === 0) {
+      // Team Name Validation
+      if (!formData.teamName.trim()) {
+        errors.teamName = "Team name is required.";
+      }
+
+      // Leader Name Validation
+      if (!formData.leaderName.trim()) {
+        errors.leaderName = "Leader name is required.";
+      }
+
+      // Competition Validation
+      if (!formData.competition.trim()) {
+        errors.competition = "Competition field is required.";
+      }
+    }
+
+    if (currentStep === 1) {
+      // Member 1 Validations
+      if (!formData.member1Name.trim()) {
+        errors.member1Name = "Member 1 name is required.";
+      }
+      if (!formData.member1Email.trim()) {
+        errors.member1Email = "Member 1 email is required.";
+      }
+      if (!formData.member1Whatsapp.trim()) {
+        errors.member1Whatsapp = "Member 1 Whatsapp number is required.";
+      }
+      if (!formData.member1NIM.trim()) {
+        errors.member1NIM = "Member 1 NIM is required.";
+      }
+      if (!formData.member1Semester.trim()) {
+        errors.member1Semester = "Member 1 semester is required.";
+      }
+      if (!formData.member1Institution.trim()) {
+        errors.member1Institution = "Member 1 institution is required.";
+      }
+      if (!formData.member1Faculty.trim()) {
+        errors.member1Faculty = "Member 1 faculty is required.";
+      }
+      if (!formData.member1Program.trim()) {
+        errors.member1Program = "Member 1 program is required.";
+      }
+      if (!formData.member1CV) {
+        errors.member1CV = "Member 1 CV is required.";
+      }
+      if (!formData.member1KSM) {
+        errors.member1KSM = "Member 1 KSM is required.";
+      }
+      if (!formData.member1Photo) {
+        errors.member1Photo = "Member 1 photo is required.";
+      }
+      if (!formData.member1KTM) {
+        errors.member1KTM = "Member 1 KTM is required.";
+      }
+    }
+
+    if (currentStep === 2) {
+      // Payment Evidence Validation
+      if (!formData.paymentEvident) {
+        errors.paymentEvident = "Payment evidence is required.";
+      }
+    }
+
+    if (currentStep === 3) {
+      // Social Media Link Validation
+      if (!formData.linkUpTwibbonAnggota1.trim()) {
+        errors.linkUpTwibbonAnggota1 = "This field is required.";
+      }
+
+      if (!formData.linkUpTwibbonAnggota2.trim()) {
+        errors.linkUpTwibbonAnggota2 = "This field is required.";
+      }
+
+      if (!formData.linkUpTwibbonAnggota3.trim()) {
+        errors.linkUpTwibbonAnggota3 = "This field is required.";
+      }
+
+      if (!formData.ssShareKe3GroupAnggota1) {
+        errors.ssShareKe3GroupAnggota1 = "This field is required.";
+      }
+    }
+
+    // Return the errors
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0; // Return true if no errors
+  };
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     toast({
@@ -220,7 +328,7 @@ export default function RegistrationForm() {
       const response = await fetch(process.env.NEXT_PUBLIC_SHEET_URL || '', {
         method: 'POST',
         headers: {
-            "Content-Type": "text/plain"
+          "Content-Type": "text/plain"
         },
         body: JSON.stringify(updatedFormData), // Use FormData directly
       });
@@ -234,12 +342,12 @@ export default function RegistrationForm() {
       router.push("/success")
       // Handle success message here, e.g., show a success notification or redirect
     } catch (error: any) {
-        toast({
-            title: "Error submit form",
-            description: error?.message || "",
-        })
+      toast({
+        title: "Error submit form",
+        description: error?.message || "",
+      })
     } finally {
-        setLoading(false); // Step 3: Set loading to false after processing
+      setLoading(false); // Step 3: Set loading to false after processing
     }
   };
 
@@ -250,25 +358,58 @@ export default function RegistrationForm() {
           <>
             <div className="space-y-2">
               <Label htmlFor="teamName">Nama Tim</Label>
-              <Input id="teamName" name="teamName" value={formData.teamName} onChange={handleInputChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
+              <Input
+                id="teamName"
+                name="teamName"
+                value={formData.teamName}
+                onChange={handleInputChange}
+                required
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+              {formErrors.teamName && <span className="text-red-500">{formErrors.teamName}</span>}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="leaderName">Nama Ketua Tim</Label>
-              <Input id="leaderName" name="leaderName" value={formData.leaderName} onChange={handleInputChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
+              <Input
+                id="leaderName"
+                name="leaderName"
+                value={formData.leaderName}
+                onChange={handleInputChange}
+                required
+                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+              />
+              {formErrors.leaderName && <span className="text-red-500">{formErrors.leaderName}</span>}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="competition">Lomba Yang Diikuti</Label>
-              <Select name="competition" onValueChange={(value) => setFormData((prev: any) => ({ ...prev, competition: value }))} required>
+              <Select
+                name="competition"
+                onValueChange={(value) => {
+                  setFormData((prev: any) => ({ ...prev, competition: value }));
+                  if (formErrors['competition']) {
+                    setFormErrors((prevErrors: any) => {
+                      const newErrors = { ...prevErrors };
+                      delete newErrors['competition'];
+                      return newErrors;
+                    });
+                  }
+                }}
+                required
+              >
                 <SelectTrigger className="bg-[#2D1B4E] border-[#FFD700] text-gray-100">
                   <SelectValue placeholder="Select competition" />
                 </SelectTrigger>
-                <SelectContent className='bg-white'>
+                <SelectContent className="bg-white">
                   <SelectItem value="competitive-programming">Competitive Programming</SelectItem>
                   <SelectItem value="capture-the-flag">Capture The Flag</SelectItem>
                   <SelectItem value="web-design">Web Design</SelectItem>
                 </SelectContent>
               </Select>
+              {formErrors.competition && <span className="text-red-500">{formErrors.competition}</span>}
             </div>
+
           </>
         )
       case 1:
@@ -283,55 +424,72 @@ export default function RegistrationForm() {
               <TabsContent key={member} value={member}>
                 <div className="space-y-2">
                   <Label htmlFor={`${member}Name`}>Nama Anggota</Label>
-                  <Input 
-                    id={`${member}Name`} 
-                    name={`${member}Name`} 
-                    value={formData[`${member}Name`]} 
-                    onChange={handleInputChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}Name`}
+                    name={`${member}Name`}
+                    value={formData[`${member}Name`]}
+                    onChange={handleInputChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}Name`] && <span className="text-red-500">{formErrors[`${member}Name`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}Email`}>Email Aktif</Label>
-                  <Input 
-                    id={`${member}Email`} 
-                    name={`${member}Email`} 
-                    type="email" 
-                    value={formData[`${member}Email`]} 
-                    onChange={handleInputChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}Email`}
+                    name={`${member}Email`}
+                    type="email"
+                    value={formData[`${member}Email`]}
+                    onChange={handleInputChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}Email`] && <span className="text-red-500">{formErrors[`${member}Email`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}Whatsapp`}>Nomor Telepon</Label>
-                  <Input 
-                    id={`${member}Whatsapp`} 
-                    name={`${member}Whatsapp`} 
-                    value={formData[`${member}Whatsapp`]} 
-                    onChange={handleInputChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}Whatsapp`}
+                    name={`${member}Whatsapp`}
+                    value={formData[`${member}Whatsapp`]}
+                    onChange={handleInputChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}Whatsapp`] && <span className="text-red-500">{formErrors[`${member}Whatsapp`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}NIM`}>NIM</Label>
-                  <Input 
-                    id={`${member}NIM`} 
-                    name={`${member}NIM`} 
-                    value={formData[`${member}NIM`]} 
-                    onChange={handleInputChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}NIM`}
+                    name={`${member}NIM`}
+                    value={formData[`${member}NIM`]}
+                    onChange={handleInputChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}NIM`] && <span className="text-red-500">{formErrors[`${member}NIM`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label>Semester</Label>
                   <RadioGroup
                     name={`${member}Semester`}
                     value={formData[`${member}Semester`]}
-                    onValueChange={(value) => setFormData((prev: any) => ({ ...prev, [`${member}Semester`]: value }))}
+                    onValueChange={(value) => {
+                      setFormData((prev: any) => ({ ...prev, [`${member}Semester`]: value }));
+                      if (formErrors[`${member}Semester`]) {
+                        setFormErrors((prevErrors: any) => {
+                          const newErrors = { ...prevErrors };
+                          delete newErrors[`${member}Semester`];
+                          return newErrors;
+                        });
+                      }
+                    }}
                     className="flex space-x-2"
                   >
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
@@ -341,85 +499,100 @@ export default function RegistrationForm() {
                       </div>
                     ))}
                   </RadioGroup>
+                  {formErrors[`${member}Semester`] && <span className="text-red-500">{formErrors[`${member}Semester`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}Institution`}>Asal Institusi</Label>
-                  <Input 
-                    id={`${member}Institution`} 
-                    name={`${member}Institution`} 
-                    value={formData[`${member}Institution`]} 
-                    onChange={handleInputChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}Institution`}
+                    name={`${member}Institution`}
+                    value={formData[`${member}Institution`]}
+                    onChange={handleInputChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}Institution`] && <span className="text-red-500">{formErrors[`${member}Institution`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}Faculty`}>Fakultas</Label>
-                  <Input 
-                    id={`${member}Faculty`} 
-                    name={`${member}Faculty`} 
-                    value={formData[`${member}Faculty`]} 
-                    onChange={handleInputChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}Faculty`}
+                    name={`${member}Faculty`}
+                    value={formData[`${member}Faculty`]}
+                    onChange={handleInputChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}Faculty`] && <span className="text-red-500">{formErrors[`${member}Faculty`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}Program`}>Program Studi</Label>
-                  <Input 
-                    id={`${member}Program`} 
-                    name={`${member}Program`} 
-                    value={formData[`${member}Program`]} 
-                    onChange={handleInputChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}Program`}
+                    name={`${member}Program`}
+                    value={formData[`${member}Program`]}
+                    onChange={handleInputChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}Program`] && <span className="text-red-500">{formErrors[`${member}Program`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}CV`}>CV</Label>
-                  <Input 
-                    id={`${member}CV`} 
-                    name={`${member}CV`} 
-                    type="file" 
-                    onChange={handleFileChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}CV`}
+                    name={`${member}CV`}
+                    type="file"
+                    onChange={handleFileChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}CV`] && <span className="text-red-500">{formErrors[`${member}CV`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}KSM`}>KSM</Label>
-                  <Input 
-                    id={`${member}KSM`} 
-                    name={`${member}KSM`} 
-                    type="file" 
-                    onChange={handleFileChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}KSM`}
+                    name={`${member}KSM`}
+                    type="file"
+                    onChange={handleFileChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}KSM`] && <span className="text-red-500">{formErrors[`${member}KSM`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}Photo`}>Pas Foto</Label>
-                
-                  <Input 
-                    id={`${member}Photo`} 
-                    name={`${member}Photo`} 
-                    type="file" 
-                    onChange={handleFileChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}Photo`}
+                    name={`${member}Photo`}
+                    type="file"
+                    onChange={handleFileChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}Photo`] && <span className="text-red-500">{formErrors[`${member}Photo`]}</span>}
                 </div>
+
                 <div className="space-y-2 mt-4">
                   <Label htmlFor={`${member}KTM`}>KTM</Label>
-                  <Input 
-                    id={`${member}KTM`} 
-                    name={`${member}KTM`} 
-                    type="file" 
-                    onChange={handleFileChange} 
-                    required={index === 0} 
+                  <Input
+                    id={`${member}KTM`}
+                    name={`${member}KTM`}
+                    type="file"
+                    onChange={handleFileChange}
+                    required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
+                  {formErrors[`${member}KTM`] && <span className="text-red-500">{formErrors[`${member}KTM`]}</span>}
                 </div>
+
               </TabsContent>
             ))}
           </Tabs>
@@ -429,6 +602,7 @@ export default function RegistrationForm() {
           <div className="space-y-2">
             <Label htmlFor="paymentEvident">Upload Payment Evidence</Label>
             <Input id="paymentEvident" name="paymentEvident" type="file" onChange={handleFileChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
+            {formErrors.paymentEvident && <span className="text-red-500">{formErrors.paymentEvident}</span>}
           </div>
         )
       case 3:
@@ -436,70 +610,82 @@ export default function RegistrationForm() {
           <>
             <div className="space-y-2">
               <Label htmlFor="linkUpTwibbonAnggota1">Link up twibbon anggota 1</Label>
-              <Input 
-                id="linkUpTwibbonAnggota1" 
-                name="linkUpTwibbonAnggota1" 
-                value={formData.linkUpTwibbonAnggota1} 
-                onChange={handleInputChange} 
-                required 
+              <Input
+                id="linkUpTwibbonAnggota1"
+                name="linkUpTwibbonAnggota1"
+                value={formData.linkUpTwibbonAnggota1}
+                onChange={handleInputChange}
+                required
                 className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
               />
+              {formErrors.linkUpTwibbonAnggota1 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota1}</span>}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="linkUpTwibbonAnggota2">Link up twibbon anggota 2</Label>
-              <Input 
-                id="linkUpTwibbonAnggota2" 
-                name="linkUpTwibbonAnggota2" 
-                value={formData.linkUpTwibbonAnggota2} 
-                onChange={handleInputChange} 
-                required 
+              <Input
+                id="linkUpTwibbonAnggota2"
+                name="linkUpTwibbonAnggota2"
+                value={formData.linkUpTwibbonAnggota2}
+                onChange={handleInputChange}
+                required
                 className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
               />
+              {formErrors.linkUpTwibbonAnggota2 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota2}</span>}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="linkUpTwibbonAnggota3">Link up twibbon anggota 3</Label>
-              <Input 
-                id="linkUpTwibbonAnggota3" 
-                name="linkUpTwibbonAnggota3" 
-                value={formData.linkUpTwibbonAnggota3} 
-                onChange={handleInputChange} 
-                required 
+              <Input
+                id="linkUpTwibbonAnggota3"
+                name="linkUpTwibbonAnggota3"
+                value={formData.linkUpTwibbonAnggota3}
+                onChange={handleInputChange}
+                required
                 className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
               />
+              {formErrors.linkUpTwibbonAnggota3 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota3}</span>}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="ssShareKe3GroupAnggota1">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 1)</Label>
-              <Input 
-                id="ssShareKe3GroupAnggota1" 
-                name="ssShareKe3GroupAnggota1" 
-                type="file" 
-                onChange={handleFileChange} 
-                required 
+              <Input
+                id="ssShareKe3GroupAnggota1"
+                name="ssShareKe3GroupAnggota1"
+                type="file"
+                onChange={handleFileChange}
+                required
                 className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
               />
+              {formErrors.ssShareKe3GroupAnggota1 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota1}</span>}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="ssShareKe3GroupAnggota2">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 2)</Label>
-              <Input 
-                id="ssShareKe3GroupAnggota2" 
-                name="ssShareKe3GroupAnggota2" 
-                type="file" 
-                onChange={handleFileChange} 
-                required 
+              <Input
+                id="ssShareKe3GroupAnggota2"
+                name="ssShareKe3GroupAnggota2"
+                type="file"
+                onChange={handleFileChange}
+                required
                 className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
               />
+              {formErrors.ssShareKe3GroupAnggota2 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota2}</span>}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="ssShareKe3GroupAnggota3">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 3)</Label>
-              <Input 
-                id="ssShareKe3GroupAnggota3" 
-                name="ssShareKe3GroupAnggota3" 
-                type="file" 
-                onChange={handleFileChange} 
-                required 
+              <Input
+                id="ssShareKe3GroupAnggota3"
+                name="ssShareKe3GroupAnggota3"
+                type="file"
+                onChange={handleFileChange}
+                required
                 className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
               />
+              {formErrors.ssShareKe3GroupAnggota3 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota3}</span>}
             </div>
+
           </>
         )
       case 4:
@@ -513,11 +699,11 @@ export default function RegistrationForm() {
               <p>Payment Evidence: {formData.paymentEvident ? formData.paymentEvident.name : 'Not uploaded'}</p>
             </div>
             <div className="flex items-center space-x-2 mt-4">
-              <Checkbox 
-                id="agreeTerms" 
-                checked={formData.agreeTerms} 
-                onCheckedChange={(checked) => setFormData((prev: any) => ({ ...prev, agreeTerms: checked }))} 
-                required 
+              <Checkbox
+                id="agreeTerms"
+                checked={formData.agreeTerms}
+                onCheckedChange={(checked) => setFormData((prev: any) => ({ ...prev, agreeTerms: checked }))}
+                required
               />
               <label htmlFor="agreeTerms" className="text-sm text-gray-100">
                 I agree to the terms and conditions
@@ -549,7 +735,7 @@ export default function RegistrationForm() {
         }}
       />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-[#FFD700] transform-origin-0" style={{ scaleX }} />
-      
+
       <Header />
 
       <div className="max-w-4xl mx-auto pt-20 pb-12">
@@ -559,8 +745,8 @@ export default function RegistrationForm() {
         <div className="flex justify-between items-center relative mb-8">
           {steps.map((step, index) => (
             <div key={index} className="flex flex-col items-center z-10">
-              <StepIcon 
-                icon={step.icon} 
+              <StepIcon
+                icon={step.icon}
                 isActive={currentStep === index}
                 isCompleted={currentStep > index}
               />
@@ -568,7 +754,7 @@ export default function RegistrationForm() {
             </div>
           ))}
           <div className="absolute top-1/2 left-0 w-full h-1 bg-[#2D1B4E] -translate-y-1/2 z-0">
-            <motion.div 
+            <motion.div
               className="h-full bg-[#FFD700]"
               initial={{ width: 0 }}
               animate={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
@@ -579,17 +765,17 @@ export default function RegistrationForm() {
         <form onSubmit={handleSubmit} className="space-y-6 mt-8">
           {renderStepContent()}
           <div className="flex justify-between mt-6">
-            <Button 
-              type="button" 
-              onClick={handlePrev} 
+            <Button
+              type="button"
+              onClick={handlePrev}
               disabled={currentStep === 0}
               className="bg-[#2D1B4E] text-[#FFD700] hover:bg-[#1E0B3B] transition-all duration-300"
             >
               Previous
             </Button>
             {currentStep === steps.length - 1 ? (
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
                 disabled={!formData.agreeTerms || loading}
               >
@@ -600,8 +786,8 @@ export default function RegistrationForm() {
                 )}
               </Button>
             ) : (
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 onClick={handleNext}
                 className="bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
               >
