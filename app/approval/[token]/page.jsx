@@ -29,18 +29,24 @@ export default function AdminApprovalPage({ params }) {
                 },
                 body: JSON.stringify({
                     email: userData.leaderName.split("/")[1], // Replace with the recipient's email
-                    subject: '✨ You are Invited! Your Submission for Interfest Has Been Accepted! 🌟',
-                    text: ` Congratulations! 
+                    subject: 'Thank you for registering for the Open Competition as part of INTERFEST 2024! 🎉',
+                    text: `Thank you for registering for the Open Competition as part of INTERFEST 2024! 🎉
 
-                            🎉 We are thrilled to inform you that your submission for Interfest: The Magical Journey has been accepted! 🪄✨
+We are thrilled to have you on board and look forward to seeing your creativity and skills in action.
 
-                            Your creativity and passion have enchanted us, and we can't wait to see the magic you bring to the event. Please keep an eye on your inbox for further details and event updates as we prepare for an unforgettable experience!
+To stay updated with important announcements, discussions, and the competition schedule, please join our official Discord server through the link below:
 
-                            If you have any questions or need assistance, feel free to reach out. We look forward to sharing this magical adventure with you!
+📌 [Join our Discord Server](https://discord.gg/9B4w95MekM)
 
-                            Warmest regards,
-                            The Interfest Team
-                            [+6287831548658] - CP`,
+If you have any questions, feel free to ask directly on the Discord server or contact us through:
+- Line: cecaciww (Yesi)
+- WhatsApp: 082219190071 (Hazna)
+
+Good luck 🚀
+
+Best regards,  
+INTERFEST 2024 
+Organizing Committee`,
                 }),
             });
 
@@ -65,13 +71,19 @@ export default function AdminApprovalPage({ params }) {
                 },
                 body: JSON.stringify({
                     email: userData.leaderName.split("/")[1], // Replace with the recipient's email
-                    subject: '🌙 Thank You for Your Submission to Interfest 🧙‍♂️',
-                    text: `Thank you for your submission to Interfest: The Magical Journey. After careful consideration, we regret to inform you that we won't be able to include your submission. Reason: ${rejectReason}.
-                    If you have any questions or would like feedback, don't hesitate to contact us.
-                    Wishing you all the best on your magical journey
+                    subject: 'Thank you for registering for the Open Competition as part of INTERFEST 2024! 🎉',
+                    text: `Thank you for your interest and effort in submitting your work for the Open Competition at INTERFEST 2024. We truly appreciate your participation and enthusiasm.
 
-                    The Interfest Team
-                    [+6287831548658] - CP`,
+After careful review, we regret to inform you that your submission does not meet the criteria required for this year’s competition. Please review the reason: ${rejectReason}
+
+If you have any questions or would like feedback on your submission, feel free to reach out to us through the official Discord server or contact us via:
+
+Line: cecaciww (Yesi)
+WhatsApp: 082219190071 (Hazna)
+Thank you once again for your participation, and we wish you all the best in your future endeavors.
+
+Best regards,
+INTERFEST 2024 Organizing Committee`,
                 }),
             });
 
@@ -144,7 +156,7 @@ export default function AdminApprovalPage({ params }) {
                             id="rejectReason"
                             value={rejectReason}
                             onChange={(e) => setRejectReason(e.target.value)}
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-[#E8590C] focus:border-[#E8590C] sm:text-sm"
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm bg-transparent"
                             placeholder="Enter reason for rejection"
                         />
                         <div className="mt-4 flex justify-end">

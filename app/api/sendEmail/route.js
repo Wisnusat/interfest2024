@@ -11,7 +11,7 @@ export async function POST(req, res) {
     });
     // Set up email data
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: 'INTERFEST 2024',
         to: email,
         subject: subject,
         text: text,
