@@ -32,7 +32,7 @@ export default function AdminApprovalPage({ params }) {
                     subject: 'Thank you for registering for the Open Competition as part of INTERFEST 2024! 🎉',
                     text: `Thank you for registering for the Open Competition as part of INTERFEST 2024! 🎉
 
-We are thrilled to have you on board and look forward to seeing your creativity and skills in action.
+We are thrilled ${userData.teamName} to have you on board and look forward to seeing your creativity and skills in action.
 
 To stay updated with important announcements, discussions, and the competition schedule, please join our official Discord server through the link below:
 
@@ -72,7 +72,7 @@ Organizing Committee`,
                 body: JSON.stringify({
                     email: userData.leaderName.split("/")[1], // Replace with the recipient's email
                     subject: 'Thank you for registering for the Open Competition as part of INTERFEST 2024! 🎉',
-                    text: `Thank you for your interest and effort in submitting your work for the Open Competition at INTERFEST 2024. We truly appreciate your participation and enthusiasm.
+                    text: `Thank you ${userData.teamName} for your interest and effort in submitting your work for the Open Competition at INTERFEST 2024. We truly appreciate your participation and enthusiasm.
 
 After careful review, we regret to inform you that your submission does not meet the criteria required for this year’s competition. Please review the reason: ${rejectReason}
 
