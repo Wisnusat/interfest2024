@@ -552,6 +552,7 @@ export default function RegistrationForm() {
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
                   {formErrors[`${member}CV`] && <span className="text-red-500">{formErrors[`${member}CV`]}</span>}
+                  {formData[`${member}CV`] && <span className="text-gray-300">Uploaded: {formData[`${member}CV`].name}</span>}
                 </div>
 
                 <div className="space-y-2 mt-4">
@@ -565,6 +566,7 @@ export default function RegistrationForm() {
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
                   {formErrors[`${member}KSM`] && <span className="text-red-500">{formErrors[`${member}KSM`]}</span>}
+                  {formData[`${member}KSM`] && <span className="text-gray-300">Uploaded: {formData[`${member}KSM`].name}</span>}
                 </div>
 
                 <div className="space-y-2 mt-4">
@@ -578,6 +580,7 @@ export default function RegistrationForm() {
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
                   {formErrors[`${member}Photo`] && <span className="text-red-500">{formErrors[`${member}Photo`]}</span>}
+                  {formData[`${member}Photo`] && <span className="text-gray-300">Uploaded: {formData[`${member}Photo`].name}</span>}
                 </div>
 
                 <div className="space-y-2 mt-4">
@@ -591,6 +594,7 @@ export default function RegistrationForm() {
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                   />
                   {formErrors[`${member}KTM`] && <span className="text-red-500">{formErrors[`${member}KTM`]}</span>}
+                  {formData[`${member}KTM`] && <span className="text-gray-300">Uploaded: {formData[`${member}KTM`].name}</span>}
                 </div>
 
               </TabsContent>
