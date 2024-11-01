@@ -49,6 +49,21 @@ export default function RootLayout({
           `}
         </Script>
         {children}
+        <footer className="text-white py-6 md:py-8 px-4 md:px-6 relative overflow-hidden">
+          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center relative z-10">
+            <div className="mb-4 sm:mb-0">
+              {/* <WandIcon className="h-8 w-8 mb-2 text-[#FFD700]" /> */}
+              <p className="text-sm">© 2024 Interfest. All rights reserved.</p>
+            </div>
+            {/* <nav>
+            <ul className="flex space-x-4 md:space-x-6">
+              <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Privacy</Link></li>
+              <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Terms</Link></li>
+              <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Contact</Link></li>
+            </ul>
+          </nav> */}
+          </div>
+        </footer>
         <Toaster />
       </body>
     </html>

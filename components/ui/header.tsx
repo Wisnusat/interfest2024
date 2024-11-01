@@ -8,7 +8,7 @@ import { useState } from 'react';
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  console.log(pathname)
+  // console.log(pathname)
 
   return (
     <>

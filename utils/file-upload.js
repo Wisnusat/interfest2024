@@ -69,8 +69,8 @@ export const uploadToGooglDrive = async (file) => {
 
         const docId = response.data.id;
         const viewLink = response.data.webViewLink;
-        console.log(`File '${file.name}' uploaded with ID: ${docId}`);
-        console.log(`View link: ${viewLink}`);
+        // console.log(`File '${file.name}' uploaded with ID: ${docId}`);
+        // console.log(`View link: ${viewLink}`);
 
         // Add permissions for anyone to read the file
         await driveService.permissions.create({

@@ -372,7 +372,7 @@ export default function InterfestLandingPage() {
           <FloatingIcon icon={UsersIcon} className="bottom-20 right-20" />
         </section>
 
-        <section id="sponsors" className="min-h-screen py-12 md:py-24 p-4 md:p-6 flex flex-col justify-center relative overflow-hidden">
+        {/* <section id="sponsors" className="min-h-screen py-12 md:py-24 p-4 md:p-6 flex flex-col justify-center relative overflow-hidden">
           <Link href="#sponsors">
             <h2 className="silver-stone-font text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-[#FFD700] relative z-10">Our Magical Sponsors</h2>
           </Link>
@@ -393,7 +393,7 @@ export default function InterfestLandingPage() {
             ))}
           </div>
           <FloatingIcon icon={SparklesIcon} className="top-20 left-20" />
-        </section>
+        </section> */}
 
         <section id="media-partners" className="min-h-screen py-12 md:py-24 p-4 md:p-6 flex flex-col justify-center relative overflow-hidden">
           <Link href="#media-partners">
@@ -418,25 +418,6 @@ export default function InterfestLandingPage() {
           <FloatingIcon icon={NewspaperIcon} className="bottom-20 right-20" />
         </section>
       </main>
-
-      <footer className="text-white py-6 md:py-8 px-4 md:px-6 relative overflow-hidden">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center relative z-10">
-          <div className="mb-4 sm:mb-0">
-            <WandIcon className="h-8 w-8 mb-2 text-[#FFD700]" />
-            <p className="text-sm">© 2024 Interfest. All rights reserved.</p>
-          </div>
-          <nav>
-            <ul className="flex space-x-4 md:space-x-6">
-              <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Privacy</Link></li>
-              <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Terms</Link></li>
-              <li><Link href="#" className="hover:text-[#FFD700] transition-colors">Contact</Link></li>
-            </ul>
-          </nav>
-        </div>
-        {[...Array(10)].map((_, i) => (
-          <MagicSparkle key={i} />
-        ))}
-      </footer>
     </div>
   )
 }

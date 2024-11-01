@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { WandIcon, UserIcon, UsersIcon, FileTextIcon, CheckIcon, SparklesIcon, StarIcon, ShareIcon } from "lucide-react"
+import { WandIcon, UserIcon, UsersIcon, FileTextIcon, CheckIcon, SparklesIcon, StarIcon, ShareIcon, CopyIcon, ChevronDownIcon, ChevronUpIcon, Edit2Icon } from "lucide-react"
 import Header from '@/components/ui/header'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/hooks/use-toast'
@@ -121,6 +121,19 @@ export default function RegistrationForm() {
     ssShareKe3GroupAnggota2: null,
     ssShareKe3GroupAnggota3: null
   })
+  const [isCopied, setIsCopied] = useState(false);
+
+  const copyAccountNumber = () => {
+    navigator.clipboard.writeText('901556823268');
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000); // Reset copied status after 2 seconds
+  };
+
+  const [expandedMember, setExpandedMember] = useState(null);
+
+  const toggleMemberDetails = (index: any) => {
+    setExpandedMember(expandedMember === index ? null : index);
+  };
 
   useEffect(() => {
     const handleMouseMove = (e: any) => {
@@ -176,95 +189,132 @@ export default function RegistrationForm() {
 
   const validateFields = () => {
     let errors: any = {};
+  
+    // Regular expression for validating email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    // Regular expression for validating URL
+    const urlRegex = /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+
+    // Regular expression to check for numeric values only
+  const numberOnlyRegex = /^\d+$/;
 
     if (currentStep === 0) {
       // Team Name Validation
       if (!formData.teamName.trim()) {
         errors.teamName = "Team name is required.";
       }
-
+  
       // Leader Name Validation
       if (!formData.leaderName.trim()) {
         errors.leaderName = "Leader name is required.";
       }
-
+  
       // Competition Validation
       if (!formData.competition.trim()) {
         errors.competition = "Competition field is required.";
       }
     }
-
+  
     if (currentStep === 1) {
       // Member 1 Validations
       if (!formData.member1Name.trim()) {
         errors.member1Name = "Member 1 name is required.";
       }
+  
       if (!formData.member1Email.trim()) {
         errors.member1Email = "Member 1 email is required.";
+      } else if (!emailRegex.test(formData.member1Email)) {
+        errors.member1Email = "Invalid email format.";
       }
+  
       if (!formData.member1Whatsapp.trim()) {
         errors.member1Whatsapp = "Member 1 Whatsapp number is required.";
+      } else if (!numberOnlyRegex.test(formData.member1Whatsapp)) {
+        errors.member1Whatsapp = "Phone number must contain only numbers.";
       }
+  
       if (!formData.member1NIM.trim()) {
         errors.member1NIM = "Member 1 NIM is required.";
+      } else if (!numberOnlyRegex.test(formData.member1NIM)) {
+        errors.member1NIM = "NIM must contain only numbers.";
       }
+  
       if (!formData.member1Semester.trim()) {
         errors.member1Semester = "Member 1 semester is required.";
       }
+  
       if (!formData.member1Institution.trim()) {
         errors.member1Institution = "Member 1 institution is required.";
       }
+  
       if (!formData.member1Faculty.trim()) {
         errors.member1Faculty = "Member 1 faculty is required.";
       }
+  
       if (!formData.member1Program.trim()) {
         errors.member1Program = "Member 1 program is required.";
       }
-      if (!formData.member1CV) {
-        errors.member1CV = "Member 1 CV is required.";
-      }
+  
       if (!formData.member1KSM) {
         errors.member1KSM = "Member 1 KSM is required.";
+      } else if (!urlRegex.test(formData.member1KSM)) {
+        errors.member1KSM = "Invalid URL KSM format.";
       }
+  
       if (!formData.member1Photo) {
         errors.member1Photo = "Member 1 photo is required.";
+      } else if (!urlRegex.test(formData.member1Photo)) {
+        errors.member1Photo = "Invalid URL Photo format.";
       }
+  
       if (!formData.member1KTM) {
         errors.member1KTM = "Member 1 KTM is required.";
+      } else if (!urlRegex.test(formData.member1KTM)) {
+        errors.member1KTM = "Invalid URL KTM format.";
       }
     }
-
+  
     if (currentStep === 2) {
       // Payment Evidence Validation
       if (!formData.paymentEvident) {
         errors.paymentEvident = "Payment evidence is required.";
+      } else if (!urlRegex.test(formData.paymentEvident)) {
+        errors.paymentEvident = "Invalid URL Payment Evidence format.";
       }
     }
-
+  
     if (currentStep === 3) {
-      // Social Media Link Validation
+      // Social Media Link Validation for URLs
       if (!formData.linkUpTwibbonAnggota1.trim()) {
         errors.linkUpTwibbonAnggota1 = "This field is required.";
+      } else if (!urlRegex.test(formData.linkUpTwibbonAnggota1)) {
+        errors.linkUpTwibbonAnggota1 = "Invalid URL format.";
       }
-
+  
       if (!formData.linkUpTwibbonAnggota2.trim()) {
         errors.linkUpTwibbonAnggota2 = "This field is required.";
+      } else if (!urlRegex.test(formData.linkUpTwibbonAnggota2)) {
+        errors.linkUpTwibbonAnggota2 = "Invalid URL format.";
       }
-
+  
       if (!formData.linkUpTwibbonAnggota3.trim()) {
         errors.linkUpTwibbonAnggota3 = "This field is required.";
+      } else if (!urlRegex.test(formData.linkUpTwibbonAnggota3)) {
+        errors.linkUpTwibbonAnggota3 = "Invalid URL format.";
       }
-
+  
       if (!formData.ssShareKe3GroupAnggota1) {
         errors.ssShareKe3GroupAnggota1 = "This field is required.";
+      } else if (!urlRegex.test(formData.ssShareKe3GroupAnggota1)) {
+        errors.ssShareKe3GroupAnggota1 = "Invalid URL format.";
       }
     }
-
-    // Return the errors
+  
+    // Set errors and return validation result
     setFormErrors(errors);
-    return Object.keys(errors).length === 0; // Return true if no errors
+    return Object.keys(errors).length === 0; // Returns true if no errors
   };
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     toast({
@@ -283,45 +333,45 @@ export default function RegistrationForm() {
     ];
 
     // Create a copy of the current formData to update with URLs
-    const updatedFormData = { ...formData };
+    // const updatedFormData = { ...formData };
 
-    // Upload files and update formData with URLs
-    for (const field of fileFields) {
-      if (formData[field]) {
-        const fileData = new FormData();
-        fileData.append('file', formData[field]);
+    // // Upload files and update formData with URLs
+    // for (const field of fileFields) {
+    //   if (formData[field]) {
+    //     const fileData = new FormData();
+    //     fileData.append('file', formData[field]);
 
-        let uploadResponse;
-        let attempts = 0;
-        const maxAttempts = 3; // Set the maximum number of retry attempts
+    //     let uploadResponse;
+    //     let attempts = 0;
+    //     const maxAttempts = 3; // Set the maximum number of retry attempts
 
-        // Retry logic with exponential backoff
-        while (attempts < maxAttempts) {
-          uploadResponse = await fetch('/api/upload', {
-            method: 'POST',
-            body: fileData,
-          });
+    //     // Retry logic with exponential backoff
+    //     while (attempts < maxAttempts) {
+    //       uploadResponse = await fetch('/api/upload', {
+    //         method: 'POST',
+    //         body: fileData,
+    //       });
 
-          if (uploadResponse.ok) {
-            const uploadResult = await uploadResponse.json();
-            updatedFormData[field] = uploadResult.viewLink; // Assuming the response contains the file URL
-            console.log('success upload file');
-            break; // Exit the retry loop on success
-          } else {
-            attempts++;
-            if (attempts < maxAttempts) {
-              const delay = Math.pow(2, attempts) * 100; // Exponential backoff
-              await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
-            } else {
-              toast({
-                title: `Error uploading ${field}`,
-                description: uploadResponse.statusText || "",
-              });
-            }
-          }
-        }
-      }
-    }
+    //       if (uploadResponse.ok) {
+    //         const uploadResult = await uploadResponse.json();
+    //         updatedFormData[field] = uploadResult.viewLink; // Assuming the response contains the file URL
+    //         console.log('success upload file');
+    //         break; // Exit the retry loop on success
+    //       } else {
+    //         attempts++;
+    //         if (attempts < maxAttempts) {
+    //           const delay = Math.pow(2, attempts) * 100; // Exponential backoff
+    //           await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
+    //         } else {
+    //           toast({
+    //             title: `Error uploading ${field}`,
+    //             description: uploadResponse.statusText || "",
+    //           });
+    //         }
+    //       }
+    //     }
+    //   }
+    // } 
 
     // You can send the updated form data to your Google Apps Script
     try {
@@ -330,7 +380,8 @@ export default function RegistrationForm() {
         headers: {
           "Content-Type": "text/plain"
         },
-        body: JSON.stringify(updatedFormData), // Use FormData directly
+        body: JSON.stringify(formData), // Use FormData directly
+        // body: JSON.stringify(updatedFormData), // Use FormData directly
       });
 
       if (!response.ok) {
@@ -338,7 +389,8 @@ export default function RegistrationForm() {
       }
 
       const result = await response.json();
-      console.log('succcess register', updatedFormData);
+      // console.log('succcess register', formData);
+      // console.log('succcess register', updatedFormData);
       router.push("/success")
       // Handle success message here, e.g., show a success notification or redirect
     } catch (error: any) {
@@ -356,127 +408,167 @@ export default function RegistrationForm() {
       case 0:
         return (
           <>
-            <div className="space-y-2">
-              <Label htmlFor="teamName">Nama Tim</Label>
-              <Input
-                id="teamName"
-                name="teamName"
-                value={formData.teamName}
-                onChange={handleInputChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.teamName && <span className="text-red-500">{formErrors.teamName}</span>}
-            </div>
+            {/* Team Information Divider */}
+            {/* <div className="flex items-center my-6 mt-10">
+              <div className="flex-grow border-t border-[#FFD700]"></div>
+              <span className="mx-4 text-[#FFD700] font-bold">Team Information</span>
+              <div className="flex-grow border-t border-[#FFD700]"></div>
+            </div> */}
 
-            <div className="space-y-2">
-              <Label htmlFor="leaderName">Nama Ketua Tim</Label>
-              <Input
-                id="leaderName"
-                name="leaderName"
-                value={formData.leaderName}
-                onChange={handleInputChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.leaderName && <span className="text-red-500">{formErrors.leaderName}</span>}
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-bold" htmlFor="teamName">Nama Tim</Label>
+                <Input
+                  id="teamName"
+                  name="teamName"
+                  placeholder="Enter Team Name"
+                  value={formData.teamName}
+                  onChange={handleInputChange}
+                  required
+                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                />
+                {formErrors.teamName && <span className="text-red-500">{formErrors.teamName}</span>}
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="competition">Lomba Yang Diikuti</Label>
-              <Select
-                name="competition"
-                onValueChange={(value) => {
-                  setFormData((prev: any) => ({ ...prev, competition: value }));
-                  if (formErrors['competition']) {
-                    setFormErrors((prevErrors: any) => {
-                      const newErrors = { ...prevErrors };
-                      delete newErrors['competition'];
-                      return newErrors;
-                    });
-                  }
-                }}
-                required
-              >
-                <SelectTrigger className="bg-[#2D1B4E] border-[#FFD700] text-gray-100">
-                  <SelectValue placeholder="Select competition" />
-                </SelectTrigger>
-                <SelectContent className="bg-white">
-                  <SelectItem value="competitive-programming">Competitive Programming</SelectItem>
-                  <SelectItem value="capture-the-flag">Capture The Flag</SelectItem>
-                  <SelectItem value="web-design">Web Design</SelectItem>
-                </SelectContent>
-              </Select>
-              {formErrors.competition && <span className="text-red-500">{formErrors.competition}</span>}
-            </div>
+              <div className="space-y-2">
+                <Label className="text-sm font-bold" htmlFor="leaderName">Nama Ketua Tim</Label>
+                <Input
+                  id="leaderName"
+                  name="leaderName"
+                  placeholder="Enter Team Leader"
+                  value={formData.leaderName}
+                  onChange={handleInputChange}
+                  required
+                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                />
+                {formErrors.leaderName && <span className="text-red-500">{formErrors.leaderName}</span>}
+              </div>
 
+              <div className="space-y-2">
+                <Label className="text-sm font-bold" htmlFor="competition">Lomba Yang Diikuti</Label>
+                <Select
+                  name="competition"
+                  onValueChange={(value) => {
+                    setFormData((prev: any) => ({ ...prev, competition: value }));
+                    if (formErrors['competition']) {
+                      setFormErrors((prevErrors: any) => {
+                        const newErrors = { ...prevErrors };
+                        delete newErrors['competition'];
+                        return newErrors;
+                      });
+                    }
+                  }}
+                  required
+                >
+                  <SelectTrigger className="bg-[#2D1B4E] border-[#FFD700] text-gray-100">
+                    <SelectValue placeholder="Select competition" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    <SelectItem value="competitive-programming">Competitive Programming</SelectItem>
+                    <SelectItem value="capture-the-flag">Capture The Flag</SelectItem>
+                    <SelectItem value="web-design">Web Design</SelectItem>
+                  </SelectContent>
+                </Select>
+                {formErrors.competition && <span className="text-red-500">{formErrors.competition}</span>}
+              </div>
+            </div>
           </>
         )
       case 1:
         return (
           <Tabs defaultValue="member1" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-[#2D1B4E]">
-              <TabsTrigger value="member1" className="data-[state=active]:bg-[#FFD700] data-[state=active]:text-[#0B0B3B]">Member 1</TabsTrigger>
-              <TabsTrigger value="member2" className="data-[state=active]:bg-[#FFD700] data-[state=active]:text-[#0B0B3B]">Member 2</TabsTrigger>
-              <TabsTrigger value="member3" className="data-[state=active]:bg-[#FFD700] data-[state=active]:text-[#0B0B3B]">Member 3</TabsTrigger>
+            <TabsList className="grid w-full h-auto grid-cols-3 bg-[#2D1B4E] rounded-lg mb-4 p-2 gap-2">
+              {['member1', 'member2', 'member3'].map((member, idx) => (
+                <TabsTrigger
+                  key={member}
+                  value={member}
+                  className="p-2 rounded-md font-semibold transition-all duration-300 ease-in-out data-[state=active]:bg-[#FFD700] data-[state=active]:text-[#0B0B3B] hover:bg-[#FFD700] hover:text-[#0B0B3B]"
+                >
+                  {`Member ${idx + 1}`}
+                </TabsTrigger>
+              ))}
             </TabsList>
             {['member1', 'member2', 'member3'].map((member, index) => (
               <TabsContent key={member} value={member}>
-                <div className="space-y-2">
-                  <Label htmlFor={`${member}Name`}>Nama Anggota</Label>
-                  <Input
-                    id={`${member}Name`}
-                    name={`${member}Name`}
-                    value={formData[`${member}Name`]}
-                    onChange={handleInputChange}
-                    required={index === 0}
-                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}Name`] && <span className="text-red-500">{formErrors[`${member}Name`]}</span>}
+                {/* Personal Information Divider */}
+                <div className="flex items-center my-6">
+                  <div className="flex-grow border-t border-[#FFD700]"></div>
+                  <span className="mx-4 text-[#FFD700] font-bold">Personal Information</span>
+                  <div className="flex-grow border-t border-[#FFD700]"></div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-bold" htmlFor={`${member}Name`}>Nama Anggota {index + 1}</Label>
+                    <Input
+                      id={`${member}Name`}
+                      name={`${member}Name`}
+                      placeholder="cth: Tiara Andini"
+                      value={formData[`${member}Name`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}Name`] && <span className="text-red-500">{formErrors[`${member}Name`]}</span>}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}Email`}>Email Aktif</Label>
+                    <Input
+                      id={`${member}Email`}
+                      name={`${member}Email`}
+                      placeholder="cth: email@gmail.com"
+                      type="email"
+                      value={formData[`${member}Email`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}Email`] && <span className="text-red-500">{formErrors[`${member}Email`]}</span>}
+                  </div>
+
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}Whatsapp`}>Nomor Telepon/Whatsapp</Label>
+                    <Input
+                      id={`${member}Whatsapp`}
+                      name={`${member}Whatsapp`}
+                      placeholder="cth: 08123456789"
+                      value={formData[`${member}Whatsapp`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}Whatsapp`] && <span className="text-red-500">{formErrors[`${member}Whatsapp`]}</span>}
+                  </div>
+                </div>
+
+                {/* Academic Information Divider */}
+                <div className="flex items-center my-6 mt-20">
+                  <div className="flex-grow border-t border-[#FFD700]"></div>
+                  <span className="mx-4 text-[#FFD700] font-bold">Academic Information</span>
+                  <div className="flex-grow border-t border-[#FFD700]"></div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}NIM`}>NIM</Label>
+                    <Input
+                      id={`${member}NIM`}
+                      name={`${member}NIM`}
+                      placeholder="Enter NIM"
+                      value={formData[`${member}NIM`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}NIM`] && <span className="text-red-500">{formErrors[`${member}NIM`]}</span>}
+                  </div>
                 </div>
 
                 <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}Email`}>Email Aktif</Label>
-                  <Input
-                    id={`${member}Email`}
-                    name={`${member}Email`}
-                    type="email"
-                    value={formData[`${member}Email`]}
-                    onChange={handleInputChange}
-                    required={index === 0}
-                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}Email`] && <span className="text-red-500">{formErrors[`${member}Email`]}</span>}
-                </div>
-
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}Whatsapp`}>Nomor Telepon</Label>
-                  <Input
-                    id={`${member}Whatsapp`}
-                    name={`${member}Whatsapp`}
-                    value={formData[`${member}Whatsapp`]}
-                    onChange={handleInputChange}
-                    required={index === 0}
-                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}Whatsapp`] && <span className="text-red-500">{formErrors[`${member}Whatsapp`]}</span>}
-                </div>
-
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}NIM`}>NIM</Label>
-                  <Input
-                    id={`${member}NIM`}
-                    name={`${member}NIM`}
-                    value={formData[`${member}NIM`]}
-                    onChange={handleInputChange}
-                    required={index === 0}
-                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}NIM`] && <span className="text-red-500">{formErrors[`${member}NIM`]}</span>}
-                </div>
-
-                <div className="space-y-2 mt-4">
-                  <Label>Semester</Label>
+                  <Label className="text-sm font-bold" htmlFor={`${member}Semester`}>Semester</Label>
                   <RadioGroup
                     name={`${member}Semester`}
                     value={formData[`${member}Semester`]}
@@ -495,106 +587,158 @@ export default function RegistrationForm() {
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
                       <div key={sem} className="flex items-center space-x-2">
                         <RadioGroupItem value={sem.toString()} id={`${member}Semester${sem}`} />
-                        <Label htmlFor={`${member}Semester${sem}`}>{sem}</Label>
+                        <Label className="text-sm font-bold" htmlFor={`${member}Semester${sem}`}>{sem}</Label>
                       </div>
                     ))}
                   </RadioGroup>
                   {formErrors[`${member}Semester`] && <span className="text-red-500">{formErrors[`${member}Semester`]}</span>}
                 </div>
 
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}Institution`}>Asal Institusi</Label>
-                  <Input
-                    id={`${member}Institution`}
-                    name={`${member}Institution`}
-                    value={formData[`${member}Institution`]}
-                    onChange={handleInputChange}
-                    required={index === 0}
-                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}Institution`] && <span className="text-red-500">{formErrors[`${member}Institution`]}</span>}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}Institution`}>Asal Institusi</Label>
+                    <Input
+                      id={`${member}Institution`}
+                      name={`${member}Institution`}
+                      placeholder="Enter institution"
+                      value={formData[`${member}Institution`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}Institution`] && <span className="text-red-500">{formErrors[`${member}Institution`]}</span>}
+                  </div>
                 </div>
 
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}Faculty`}>Fakultas</Label>
-                  <Input
-                    id={`${member}Faculty`}
-                    name={`${member}Faculty`}
-                    value={formData[`${member}Faculty`]}
-                    onChange={handleInputChange}
-                    required={index === 0}
-                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}Faculty`] && <span className="text-red-500">{formErrors[`${member}Faculty`]}</span>}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}Faculty`}>Fakultas</Label>
+                    <Input
+                      id={`${member}Faculty`}
+                      name={`${member}Faculty`}
+                      placeholder="Enter faculty"
+                      value={formData[`${member}Faculty`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}Faculty`] && <span className="text-red-500">{formErrors[`${member}Faculty`]}</span>}
+                  </div>
+
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}Program`}>Program Studi</Label>
+                    <Input
+                      id={`${member}Program`}
+                      name={`${member}Program`}
+                      placeholder="Enter program of study"
+                      value={formData[`${member}Program`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}Program`] && <span className="text-red-500">{formErrors[`${member}Program`]}</span>}
+                  </div>
                 </div>
 
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}Program`}>Program Studi</Label>
-                  <Input
-                    id={`${member}Program`}
-                    name={`${member}Program`}
-                    value={formData[`${member}Program`]}
-                    onChange={handleInputChange}
-                    required={index === 0}
-                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}Program`] && <span className="text-red-500">{formErrors[`${member}Program`]}</span>}
+                {/* Document Links Divider */}
+                <div className="flex items-center my-6 mt-20">
+                  <div className="flex-grow border-t border-[#FFD700]"></div>
+                  <span className="mx-4 text-[#FFD700] font-bold">Document Links</span>
+                  <div className="flex-grow border-t border-[#FFD700]"></div>
                 </div>
 
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}CV`}>CV</Label>
-                  <Input
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* <div className="space-y-2 mt-4"> */}
+                  {/* <Label className="text-sm font-bold" htmlFor={`${member}CV`}>CV</Label> */}
+                  {/* <Input
                     id={`${member}CV`}
                     name={`${member}CV`}
                     type="file"
                     onChange={handleFileChange}
                     required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}CV`] && <span className="text-red-500">{formErrors[`${member}CV`]}</span>}
-                  {formData[`${member}CV`] && <span className="text-gray-300">Uploaded: {formData[`${member}CV`].name}</span>}
-                </div>
+                  /> */}
+                  {/* <Input
+                      id={`${member}CV`}
+                      name={`${member}CV`}
+                      placeholder="cth: https://example.com/cv.pdf"
+                      value={formData[`${member}CV`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}CV`] && <span className="text-red-500">{formErrors[`${member}CV`]}</span>} */}
+                  {/* {formData[`${member}CV`] && <span className="text-gray-300">Uploaded: {formData[`${member}CV`].name}</span>} */}
+                  {/* </div> */}
 
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}KSM`}>KSM</Label>
-                  <Input
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}KSM`}>Tanda Aktif Mahasiswa</Label>
+                    {/* <Input
                     id={`${member}KSM`}
                     name={`${member}KSM`}
                     type="file"
                     onChange={handleFileChange}
                     required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}KSM`] && <span className="text-red-500">{formErrors[`${member}KSM`]}</span>}
-                  {formData[`${member}KSM`] && <span className="text-gray-300">Uploaded: {formData[`${member}KSM`].name}</span>}
-                </div>
+                  /> */}
+                    <Input
+                      id={`${member}KSM`}
+                      name={`${member}KSM`}
+                      placeholder="cth: https://example.com/tanda-aktif-mahasiswa.pdf"
+                      value={formData[`${member}KSM`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}KSM`] && <span className="text-red-500">{formErrors[`${member}KSM`]}</span>}
+                    {/* {formData[`${member}KSM`] && <span className="text-gray-300">Uploaded: {formData[`${member}KSM`].name}</span>} */}
+                  </div>
 
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}Photo`}>Pas Foto</Label>
-                  <Input
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}Photo`}>Pas Foto</Label>
+                    {/* <Input
                     id={`${member}Photo`}
                     name={`${member}Photo`}
                     type="file"
                     onChange={handleFileChange}
                     required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}Photo`] && <span className="text-red-500">{formErrors[`${member}Photo`]}</span>}
-                  {formData[`${member}Photo`] && <span className="text-gray-300">Uploaded: {formData[`${member}Photo`].name}</span>}
-                </div>
+                  /> */}
+                    <Input
+                      id={`${member}Photo`}
+                      name={`${member}Photo`}
+                      placeholder="cth: https://example.com/photo.jpg"
+                      value={formData[`${member}Photo`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}Photo`] && <span className="text-red-500">{formErrors[`${member}Photo`]}</span>}
+                    {/* {formData[`${member}Photo`] && <span className="text-gray-300">Uploaded: {formData[`${member}Photo`].name}</span>} */}
+                  </div>
 
-                <div className="space-y-2 mt-4">
-                  <Label htmlFor={`${member}KTM`}>KTM</Label>
-                  <Input
+                  <div className="space-y-2 mt-4">
+                    <Label className="text-sm font-bold" htmlFor={`${member}KTM`}>KTM (Kartu Tanda Mahasiswa)</Label>
+                    {/* <Input
                     id={`${member}KTM`}
                     name={`${member}KTM`}
                     type="file"
                     onChange={handleFileChange}
                     required={index === 0}
                     className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                  />
-                  {formErrors[`${member}KTM`] && <span className="text-red-500">{formErrors[`${member}KTM`]}</span>}
-                  {formData[`${member}KTM`] && <span className="text-gray-300">Uploaded: {formData[`${member}KTM`].name}</span>}
+                  /> */}
+                    <Input
+                      id={`${member}KTM`}
+                      name={`${member}KTM`}
+                      placeholder="cth: https://example.com/ktm.jpg"
+                      value={formData[`${member}KTM`]}
+                      onChange={handleInputChange}
+                      required={index === 0}
+                      className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                    />
+                    {formErrors[`${member}KTM`] && <span className="text-red-500">{formErrors[`${member}KTM`]}</span>}
+                    {/* {formData[`${member}KTM`] && <span className="text-gray-300">Uploaded: {formData[`${member}KTM`].name}</span>} */}
+                  </div>
                 </div>
 
               </TabsContent>
@@ -602,119 +746,584 @@ export default function RegistrationForm() {
           </Tabs>
         )
       case 2:
+        // return (
+        //   <>
+        //     {/* Payment Divider */}
+        //     {/* <div className="flex items-center my-6 mt-10">
+        //       <div className="flex-grow border-t border-[#FFD700]"></div>
+        //       <span className="mx-4 text-[#FFD700] font-bold">Payment Evidence</span>
+        //       <div className="flex-grow border-t border-[#FFD700]"></div>
+        //     </div> */}
+
+        //     <div className="space-y-2">
+        //       <Label className="text-sm font-bold" htmlFor="paymentEvident">Upload Payment Evidence</Label>
+        //       {/* <Input id="paymentEvident" name="paymentEvident" type="file" onChange={handleFileChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" /> */}
+        //       <Input
+        //         id={`paymentEvident`}
+        //         name={`paymentEvident`}
+        //         placeholder="cth: https://example.com/payment-evidence.jpg"
+        //         value={formData.paymentEvident}
+        //         onChange={handleInputChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       />
+        //       {formErrors.paymentEvident && <span className="text-red-500">{formErrors.paymentEvident}</span>}
+        //     </div>
+        //   </>
+        // )
         return (
-          <div className="space-y-2">
-            <Label htmlFor="paymentEvident">Upload Payment Evidence</Label>
-            <Input id="paymentEvident" name="paymentEvident" type="file" onChange={handleFileChange} required className="bg-[#2D1B4E] border-[#FFD700] text-gray-100" />
-            {formErrors.paymentEvident && <span className="text-red-500">{formErrors.paymentEvident}</span>}
-          </div>
-        )
+          <>
+            {/* Payment Evidence Section Header */}
+            <div className="flex items-center my-8">
+              <div className="flex-grow border-t border-[#FFD700]"></div>
+              <h3 className="mx-4 text-[#FFD700] font-semibold text-lg">Payment Evidence</h3>
+              <div className="flex-grow border-t border-[#FFD700]"></div>
+            </div>
+
+            {/* Payment Transfer Instructions */}
+            <div className="bg-[#1E0B3B] text-gray-100 p-4 rounded-md mb-4">
+              <h4 className="font-semibold text-lg mb-2">Transfer Details</h4>
+              <p>Please transfer your payment to the following account:</p>
+
+              {/* Bank Information */}
+              <div className="mt-4 flex items-center">
+                <span className="font-bold">Bank Name: </span>
+                <span className="ml-2">Bank Seabank</span>
+                <img
+                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhOFnkSwf9r1o1QuR-QMW-ra_Gcx_0ZDtLl-rQnhXfaqDMN82MQBBR_36Tvuw8qTk_Aih5kb-9j5YUfwb5NOZYe5Aj2jx2VPi0gy1nSJBbBwtceUOPRB0rKKQ2rSFGzDhYGTM_NPOJsXDdnck3GT2kTVfCQgwdHvQFdNKE_dUT5xFIeZO-Awlbx9mNQBg/w295-h320/Sea%20Bank%20Logomark.png" // Replace with actual path to logo
+                  alt="Bank Logo"
+                  className="w-6 h-6 ml-2"
+                />
+              </div>
+
+              {/* Account Number with Copy Function */}
+              <div className="mt-2 flex items-center">
+                <span className="font-bold">Account Number: </span>
+                <span className="ml-2">901556823268</span>
+                <button
+                  onClick={copyAccountNumber}
+                  className="ml-2 flex items-center text-sm text-[#FFD700] hover:text-[#FFA500] transition"
+                >
+                  <CopyIcon className="w-4 h-4 mr-1" />
+                  {isCopied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+
+              {/* Account Holder Name */}
+              <div className="mt-2">
+                <span className="font-bold">Account Name: </span>
+                <span>Labib Hakam Fauzi</span>
+              </div>
+
+              <p className="text-sm text-gray-400 mt-2">
+                * Make sure to use the correct account details to avoid delays in verification.
+              </p>
+            </div>
+
+
+            {/* Payment Evidence Input Field */}
+            <div className="space-y-2">
+              <Label htmlFor="paymentEvident" className="text-sm font-semibold text-gray-300">
+                Upload Payment Evidence
+              </Label>
+              <Input
+                id="paymentEvident"
+                name="paymentEvident"
+                placeholder="cth: https://example.com/payment-evidence.jpg"
+                value={formData.paymentEvident}
+                onChange={handleInputChange}
+                required
+                className="w-full bg-[#2D1B4E] border-[#FFD700] text-gray-100 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition duration-200"
+              />
+              <p className="text-xs text-gray-400 mt-1">
+                Please provide a link to your payment evidence. Make sure the link is accessible.
+              </p>
+              {formErrors.paymentEvident && (
+                <span className="text-sm text-red-500 mt-1 block">{formErrors.paymentEvident}</span>
+              )}
+            </div>
+          </>
+        );
+
       case 3:
+        // return (
+        //   <>
+        //     <div className="space-y-2">
+        //       <Label htmlFor="linkUpTwibbonAnggota1">Link up twibbon anggota 1</Label>
+        //       <Input
+        //         id="linkUpTwibbonAnggota1"
+        //         name="linkUpTwibbonAnggota1"
+        //         value={formData.linkUpTwibbonAnggota1}
+        //         onChange={handleInputChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       />
+        //       {formErrors.linkUpTwibbonAnggota1 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota1}</span>}
+        //     </div>
+
+        //     <div className="space-y-2">
+        //       <Label htmlFor="linkUpTwibbonAnggota2">Link up twibbon anggota 2</Label>
+        //       <Input
+        //         id="linkUpTwibbonAnggota2"
+        //         name="linkUpTwibbonAnggota2"
+        //         value={formData.linkUpTwibbonAnggota2}
+        //         onChange={handleInputChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       />
+        //       {formErrors.linkUpTwibbonAnggota2 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota2}</span>}
+        //     </div>
+
+        //     <div className="space-y-2">
+        //       <Label htmlFor="linkUpTwibbonAnggota3">Link up twibbon anggota 3</Label>
+        //       <Input
+        //         id="linkUpTwibbonAnggota3"
+        //         name="linkUpTwibbonAnggota3"
+        //         value={formData.linkUpTwibbonAnggota3}
+        //         onChange={handleInputChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       />
+        //       {formErrors.linkUpTwibbonAnggota3 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota3}</span>}
+        //     </div>
+
+        //     <div className="space-y-2">
+        //       <Label htmlFor="ssShareKe3GroupAnggota1">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 1)</Label>
+        //       {/* <Input
+        //         id="ssShareKe3GroupAnggota1"
+        //         name="ssShareKe3GroupAnggota1"
+        //         type="file"
+        //         onChange={handleFileChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       /> */}
+        //       <Input
+        //         id="ssShareKe3GroupAnggota1"
+        //         name="ssShareKe3GroupAnggota1"
+        //         value={formData.ssShareKe3GroupAnggota1}
+        //         onChange={handleInputChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       />
+        //       {formErrors.ssShareKe3GroupAnggota1 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota1}</span>}
+        //     </div>
+
+        //     <div className="space-y-2">
+        //       <Label htmlFor="ssShareKe3GroupAnggota2">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 2)</Label>
+        //       {/* <Input
+        //         id="ssShareKe3GroupAnggota2"
+        //         name="ssShareKe3GroupAnggota2"
+        //         type="file"
+        //         onChange={handleFileChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       /> */}
+        //       <Input
+        //         id="ssShareKe3GroupAnggota2"
+        //         name="ssShareKe3GroupAnggota2"
+        //         value={formData.ssShareKe3GroupAnggota2}
+        //         onChange={handleInputChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       />
+        //       {formErrors.ssShareKe3GroupAnggota2 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota2}</span>}
+        //     </div>
+
+        //     <div className="space-y-2">
+        //       <Label htmlFor="ssShareKe3GroupAnggota3">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 3)</Label>
+        //       {/* <Input
+        //         id="ssShareKe3GroupAnggota3"
+        //         name="ssShareKe3GroupAnggota3"
+        //         type="file"
+        //         onChange={handleFileChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       /> */}
+        //       <Input
+        //         id="ssShareKe3GroupAnggota3"
+        //         name="ssShareKe3GroupAnggota3"
+        //         value={formData.ssShareKe3GroupAnggota3}
+        //         onChange={handleInputChange}
+        //         required
+        //         className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+        //       />
+        //       {formErrors.ssShareKe3GroupAnggota3 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota3}</span>}
+        //     </div>
+
+        //   </>
+        // )
         return (
           <>
-            <div className="space-y-2">
-              <Label htmlFor="linkUpTwibbonAnggota1">Link up twibbon anggota 1</Label>
-              <Input
-                id="linkUpTwibbonAnggota1"
-                name="linkUpTwibbonAnggota1"
-                value={formData.linkUpTwibbonAnggota1}
-                onChange={handleInputChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.linkUpTwibbonAnggota1 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota1}</span>}
+            {/* Twibbon Links Section */}
+            <div className="mb-6">
+              <div className="flex items-center mt-10">
+                <div className="flex-grow border-t border-[#FFD700]"></div>
+                <span className="mx-4 text-[#FFD700] font-semibold">Twibbon Links</span>
+                <div className="flex-grow border-t border-[#FFD700]"></div>
+              </div>
+              <p className='mt-1 mb-4'>*Twibbon: <a
+                href="https://bit.ly/TwibbonInterfest2024"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#FFD700] underline hover:text-[#FFA500] transition"
+              >
+                https://bit.ly/TwibbonInterfest2024
+              </a></p>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="linkUpTwibbonAnggota1" className="text-sm font-medium text-[#FFD700]">Link Twibbon Anggota 1</Label>
+                  <Input
+                    id="linkUpTwibbonAnggota1"
+                    name="linkUpTwibbonAnggota1"
+                    placeholder="cth: https://example.com/twibbon-1.pdf"
+                    value={formData.linkUpTwibbonAnggota1}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100 rounded-md px-3 py-2 focus:outline-none focus:border-[#FFD700]"
+                  />
+                  {formErrors.linkUpTwibbonAnggota1 && <span className="text-xs text-red-500">{formErrors.linkUpTwibbonAnggota1}</span>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="linkUpTwibbonAnggota2" className="text-sm font-medium text-[#FFD700]">Link Twibbon Anggota 2</Label>
+                  <Input
+                    id="linkUpTwibbonAnggota2"
+                    name="linkUpTwibbonAnggota2"
+                    placeholder="cth: https://example.com/twibbon-2.pdf"
+                    value={formData.linkUpTwibbonAnggota2}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100 rounded-md px-3 py-2 focus:outline-none focus:border-[#FFD700]"
+                  />
+                  {formErrors.linkUpTwibbonAnggota2 && <span className="text-xs text-red-500">{formErrors.linkUpTwibbonAnggota2}</span>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="linkUpTwibbonAnggota3" className="text-sm font-medium text-[#FFD700]">Link Twibbon Anggota 3</Label>
+                  <Input
+                    id="linkUpTwibbonAnggota3"
+                    name="linkUpTwibbonAnggota3"
+                    placeholder="cth: https://example.com/twibbon-3.pdf"
+                    value={formData.linkUpTwibbonAnggota3}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100 rounded-md px-3 py-2 focus:outline-none focus:border-[#FFD700]"
+                  />
+                  {formErrors.linkUpTwibbonAnggota3 && <span className="text-xs text-red-500">{formErrors.linkUpTwibbonAnggota3}</span>}
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="linkUpTwibbonAnggota2">Link up twibbon anggota 2</Label>
-              <Input
-                id="linkUpTwibbonAnggota2"
-                name="linkUpTwibbonAnggota2"
-                value={formData.linkUpTwibbonAnggota2}
-                onChange={handleInputChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.linkUpTwibbonAnggota2 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota2}</span>}
-            </div>
+            {/* IG Story Screenshot Links Section */}
+            <div className="mb-6">
+              <div className="flex items-center mt-10">
+                <div className="flex-grow border-t border-[#FFD700]"></div>
+                <span className="mx-4 text-[#FFD700] font-semibold">IG Story Screenshot Links</span>
+                <div className="flex-grow border-t border-[#FFD700]"></div>
+              </div>
+              <p className='mt-1 mb-4'>*SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 3)</p>
 
-            <div className="space-y-2">
-              <Label htmlFor="linkUpTwibbonAnggota3">Link up twibbon anggota 3</Label>
-              <Input
-                id="linkUpTwibbonAnggota3"
-                name="linkUpTwibbonAnggota3"
-                value={formData.linkUpTwibbonAnggota3}
-                onChange={handleInputChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.linkUpTwibbonAnggota3 && <span className="text-red-500">{formErrors.linkUpTwibbonAnggota3}</span>}
-            </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="ssShareKe3GroupAnggota1" className="text-sm font-medium text-[#FFD700]">Screenshot Anggota 1</Label>
+                  <Input
+                    id="ssShareKe3GroupAnggota1"
+                    name="ssShareKe3GroupAnggota1"
+                    placeholder="cth: https://example.com/ss-ig-1.pdf"
+                    value={formData.ssShareKe3GroupAnggota1}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100 rounded-md px-3 py-2 focus:outline-none focus:border-[#FFD700]"
+                  />
+                  {formErrors.ssShareKe3GroupAnggota1 && <span className="text-xs text-red-500">{formErrors.ssShareKe3GroupAnggota1}</span>}
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="ssShareKe3GroupAnggota1">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 1)</Label>
-              <Input
-                id="ssShareKe3GroupAnggota1"
-                name="ssShareKe3GroupAnggota1"
-                type="file"
-                onChange={handleFileChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.ssShareKe3GroupAnggota1 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota1}</span>}
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ssShareKe3GroupAnggota2" className="text-sm font-medium text-[#FFD700]">Screenshot Anggota 2</Label>
+                  <Input
+                    id="ssShareKe3GroupAnggota2"
+                    name="ssShareKe3GroupAnggota2"
+                    placeholder="cth: https://example.com/ss-ig-2.pdf"
+                    value={formData.ssShareKe3GroupAnggota2}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100 rounded-md px-3 py-2 focus:outline-none focus:border-[#FFD700]"
+                  />
+                  {formErrors.ssShareKe3GroupAnggota2}
+                  {formErrors.ssShareKe3GroupAnggota2 && <span className="text-xs text-red-500">{formErrors.ssShareKe3GroupAnggota2}</span>}
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="ssShareKe3GroupAnggota2">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 2)</Label>
-              <Input
-                id="ssShareKe3GroupAnggota2"
-                name="ssShareKe3GroupAnggota2"
-                type="file"
-                onChange={handleFileChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.ssShareKe3GroupAnggota2 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota2}</span>}
+                <div className="space-y-2">
+                  <Label htmlFor="ssShareKe3GroupAnggota3" className="text-sm font-medium text-[#FFD700]">Screenshot Anggota 3</Label>
+                  <Input
+                    id="ssShareKe3GroupAnggota3"
+                    name="ssShareKe3GroupAnggota3"
+                    placeholder="cth: https://example.com/ss-ig-3.pdf"
+                    value={formData.ssShareKe3GroupAnggota3}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-[#2D1B4E] border-[#FFD700] text-gray-100 rounded-md px-3 py-2 focus:outline-none focus:border-[#FFD700]"
+                  />
+                  {formErrors.ssShareKe3GroupAnggota3}
+                  {formErrors.ssShareKe3GroupAnggota3 && <span className="text-xs text-red-500">{formErrors.ssShareKe3GroupAnggota3}</span>}
+                </div>
+              </div>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="ssShareKe3GroupAnggota3">SS share poster di story IG + tag IG Interfest & HIMAIF (ANGGOTA 3)</Label>
-              <Input
-                id="ssShareKe3GroupAnggota3"
-                name="ssShareKe3GroupAnggota3"
-                type="file"
-                onChange={handleFileChange}
-                required
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.ssShareKe3GroupAnggota3 && <span className="text-red-500">{formErrors.ssShareKe3GroupAnggota3}</span>}
-            </div>
-
           </>
-        )
+        );
       case 4:
+        // return (
+        //   <>
+        //     <div className="space-y-2">
+        //       <h3 className="text-xl font-semibold text-[#FFD700]">Please review your information:</h3>
+        //       <p>Team Name: {formData.teamName}</p>
+        //       <p>Team Leader: {formData.leaderName}</p>
+        //       <p>Competition: {formData.competition}</p>
+        //       <p>Payment Evidence: {formData.paymentEvident ? formData.paymentEvident : 'Not uploaded'}</p>
+        //       {/* <p>Payment Evidence: {formData.paymentEvident ? formData.paymentEvident.name : 'Not uploaded'}</p> */}
+        //     </div>
+        //     <div className="flex items-center space-x-2 mt-4">
+        //       <Checkbox
+        //         id="agreeTerms"
+        //         checked={formData.agreeTerms}
+        //         onCheckedChange={(checked) => setFormData((prev: any) => ({ ...prev, agreeTerms: checked }))}
+        //         required
+        //       />
+        //       <label htmlFor="agreeTerms" className="text-sm text-gray-100">
+        //         I agree to the terms and conditions
+        //       </label>
+        //     </div>
+        //   </>
+        // )
+
         return (
           <>
-            <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-[#FFD700]">Please review your information:</h3>
-              <p>Team Name: {formData.teamName}</p>
-              <p>Team Leader: {formData.leaderName}</p>
-              <p>Competition: {formData.competition}</p>
-              <p>Payment Evidence: {formData.paymentEvident ? formData.paymentEvident.name : 'Not uploaded'}</p>
-            </div>
-            <div className="flex items-center space-x-2 mt-4">
-              <Checkbox
-                id="agreeTerms"
-                checked={formData.agreeTerms}
-                onCheckedChange={(checked) => setFormData((prev: any) => ({ ...prev, agreeTerms: checked }))}
-                required
-              />
-              <label htmlFor="agreeTerms" className="text-sm text-gray-100">
-                I agree to the terms and conditions
-              </label>
+            <div className="space-y-6">
+              {/* Header */}
+              <h3 className="text-2xl font-bold text-[#FFD700] mb-4">Review Your Information</h3>
+
+              {/* Team Information */}
+              <div className="relative bg-[#1E0B3B] p-4 rounded-md shadow-md space-y-2">
+                <h4 className="text-lg font-semibold text-gray-100">Team Information</h4>
+                <Button
+                  className="absolute top-0 right-4 text-sm text-[#FFD700]"
+                  onClick={() => setCurrentStep(0)}
+                >
+                  <Edit2Icon className="w-4 h-4 mr-1" />
+                  Edit
+                </Button>
+                <p><span className="font-semibold text-[#FFD700]">Team Name:</span> {formData.teamName || 'Not provided'}</p>
+                <p><span className="font-semibold text-[#FFD700]">Team Leader:</span> {formData.leaderName || 'Not provided'}</p>
+                <p><span className="font-semibold text-[#FFD700]">Competition:</span> {formData.competition || 'Not provided'}</p>
+              </div>
+
+              {/* Member Details */}
+              <div className="relative bg-[#1E0B3B] p-6 rounded-md shadow-lg space-y-4">
+                {/* Section Header with Edit Button */}
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="text-lg font-semibold text-gray-100">Member Details</h4>
+                  <button
+                    className="flex items-center text-sm text-[#FFD700] hover:text-[#FFA500] transition duration-300"
+                    onClick={() => setCurrentStep(1)}
+                  >
+                    <Edit2Icon className="w-4 h-4 mr-1" />
+                    Edit
+                  </button>
+                </div>
+
+                {/* Collapsible Cards for Each Member */}
+                {[1, 2, 3].map((index) => (
+                  <div
+                    key={index}
+                    className="bg-[#2D1B4E] p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
+                  >
+                    {/* Member Header with Toggle Icon */}
+                    <div
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={() => toggleMemberDetails(index)}
+                    >
+                      <h5 className="font-semibold text-[#FFD700]">Member {index}</h5>
+                      {expandedMember === index ? (
+                        <ChevronUpIcon className="text-[#FFD700] w-5 h-5" />
+                      ) : (
+                        <ChevronDownIcon className="text-[#FFD700] w-5 h-5" />
+                      )}
+                    </div>
+
+                    {/* Collapsible Content */}
+                    {expandedMember === index && (
+                      <div className="mt-3 space-y-2 text-sm">
+                        <p><span className="font-semibold text-gray-300">Name:</span> {formData[`member${index}Name`] || 'Not provided'}</p>
+                        <p><span className="font-semibold text-gray-300">Email:</span> {formData[`member${index}Email`] || 'Not provided'}</p>
+                        <p><span className="font-semibold text-gray-300">Whatsapp:</span> {formData[`member${index}Whatsapp`] || 'Not provided'}</p>
+                        <p><span className="font-semibold text-gray-300">NIM:</span> {formData[`member${index}NIM`] || 'Not provided'}</p>
+                        <p><span className="font-semibold text-gray-300">Semester:</span> {formData[`member${index}Semester`] || 'Not provided'}</p>
+                        <p><span className="font-semibold text-gray-300">Institution:</span> {formData[`member${index}Institution`] || 'Not provided'}</p>
+                        <p><span className="font-semibold text-gray-300">Faculty:</span> {formData[`member${index}Faculty`] || 'Not provided'}</p>
+                        <p><span className="font-semibold text-gray-300">Program:</span> {formData[`member${index}Program`] || 'Not provided'}</p>
+                        <p>
+                          <span className="font-semibold text-gray-300">KSM:</span>{' '}
+                          {formData[`member${index}KSM`] ? (
+                            <a
+                              href={formData[`member${index}KSM`]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#FFD700] underline hover:text-[#FFA500] transition"
+                            >
+                              {formData[`member${index}KSM`]}
+                            </a>
+                          ) : (
+                            'Not provided'
+                          )}
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Photo:</span>{' '}
+                          {formData[`member${index}Photo`] ? (
+                            <a
+                              href={formData[`member${index}Photo`]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#FFD700] underline hover:text-[#FFA500] transition"
+                            >
+                              {formData[`member${index}Photo`]}
+                            </a>
+                          ) : (
+                            'Not provided'
+                          )}
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">KTM:</span>{' '}
+                          {formData[`member${index}KTM`] ? (
+                            <a
+                              href={formData[`member${index}KTM`]}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#FFD700] underline hover:text-[#FFA500] transition"
+                            >
+                              {formData[`member${index}KTM`]}
+                            </a>
+                          ) : (
+                            'Not provided'
+                          )}
+                        </p>
+
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Payment Evidence */}
+              <div className="relative bg-[#1E0B3B] p-4 rounded-md shadow-md space-y-2">
+                <h4 className="text-lg font-semibold text-gray-100">Payment Evidence</h4>
+                <Button
+                  className="absolute top-0 right-4 text-sm text-[#FFD700]"
+                  onClick={() => setCurrentStep(2)}
+                >
+                  <Edit2Icon className="w-4 h-4 mr-1" />
+                  Edit
+                </Button>
+                <p>
+                  <span className="font-semibold">Link:</span>{' '}
+                  {formData.paymentEvident ? (
+                    <a href={formData.paymentEvident} target="_blank" rel="noopener noreferrer" className="text-[#FFD700] underline hover:text-[#FFA500] transition">
+                      {formData.paymentEvident}
+                    </a>
+                  ) : (
+                    'Not uploaded'
+                  )}
+                </p>
+              </div>
+
+              {/* Social Media Links */}
+              <div className="relative bg-[#1E0B3B] p-4 rounded-md shadow-md space-y-2">
+                <h4 className="text-lg font-semibold text-gray-100">Social Media Links</h4>
+                <Button
+                  className="absolute top-0 right-4 text-sm text-[#FFD700]"
+                  onClick={() => setCurrentStep(3)}
+                >
+                  <Edit2Icon className="w-4 h-4 mr-1" />
+                  Edit
+                </Button>
+                <p>
+                  <span className="font-semibold">Twibbon Member 1:</span>{' '}
+                  {formData.linkUpTwibbonAnggota1 ? (
+                    <a href={formData.linkUpTwibbonAnggota1} target="_blank" rel="noopener noreferrer" className="text-[#FFD700] underline hover:text-[#FFA500] transition">
+                      {formData.linkUpTwibbonAnggota1}
+                    </a>
+                  ) : (
+                    'Not provided'
+                  )}
+                </p>
+                <p>
+                  <span className="font-semibold">Twibbon Member 2:</span>{' '}
+                  {formData.linkUpTwibbonAnggota2 ? (
+                    <a href={formData.linkUpTwibbonAnggota2} target="_blank" rel="noopener noreferrer" className="text-[#FFD700] underline hover:text-[#FFA500] transition">
+                      {formData.linkUpTwibbonAnggota2}
+                    </a>
+                  ) : (
+                    'Not provided'
+                  )}
+                </p>
+                <p>
+                  <span className="font-semibold">Twibbon Member 3:</span>{' '}
+                  {formData.linkUpTwibbonAnggota3 ? (
+                    <a href={formData.linkUpTwibbonAnggota3} target="_blank" rel="noopener noreferrer" className="text-[#FFD700] underline hover:text-[#FFA500] transition">
+                      {formData.linkUpTwibbonAnggota3}
+                    </a>
+                  ) : (
+                    'Not provided'
+                  )}
+                </p>
+                <p>
+                  <span className="font-semibold">Share Poster Instagram 1:</span>{' '}
+                  {formData.ssShareKe3GroupAnggota1 ? (
+                    <a href={formData.ssShareKe3GroupAnggota1} target="_blank" rel="noopener noreferrer" className="text-[#FFD700] underline hover:text-[#FFA500] transition">
+                      {formData.ssShareKe3GroupAnggota1}
+                    </a>
+                  ) : (
+                    'Not provided'
+                  )}
+                </p>
+                <p>
+                  <span className="font-semibold">Share Poster Instagram 2:</span>{' '}
+                  {formData.ssShareKe3GroupAnggota2 ? (
+                    <a href={formData.ssShareKe3GroupAnggota2} target="_blank" rel="noopener noreferrer" className="text-[#FFD700] underline hover:text-[#FFA500] transition">
+                      {formData.ssShareKe3GroupAnggota2}
+                    </a>
+                  ) : (
+                    'Not provided'
+                  )}
+                </p>
+                <p>
+                  <span className="font-semibold">Share Poster Instagram 3:</span>{' '}
+                  {formData.ssShareKe3GroupAnggota3 ? (
+                    <a href={formData.ssShareKe3GroupAnggota3} target="_blank" rel="noopener noreferrer" className="text-[#FFD700] underline hover:text-[#FFA500] transition">
+                      {formData.ssShareKe3GroupAnggota3}
+                    </a>
+                  ) : (
+                    'Not provided'
+                  )}
+                </p>
+              </div>
+
+              {/* Terms and Agreement */}
+              <div className="flex items-center space-x-2 mt-6">
+                <Checkbox
+                  id="agreeTerms"
+                  checked={formData.agreeTerms}
+                  onCheckedChange={(checked) => setFormData((prev: any) => ({ ...prev, agreeTerms: checked }))}
+                  required
+                />
+                <label htmlFor="agreeTerms" className="text-sm text-gray-100">
+                  I agree to the terms and conditions
+                </label>
+              </div>
             </div>
           </>
-        )
+        );
+
       default:
         return null
     }
@@ -742,41 +1351,63 @@ export default function RegistrationForm() {
 
       <Header />
 
-      <div className="max-w-4xl mx-auto pt-20 pb-12">
-        <FloatingIcon icon={WandIcon} className="mb-8" />
+      <div className="max-w-4xl mx-auto mb-12 pt-12">
+        <FloatingIcon icon={WandIcon} />
         <h1 className="text-3xl font-bold text-[#FFD700] mb-2 text-center">Register for INTERFEST 2024</h1>
         <p className="text-lg mb-6 text-center">Join us in this magical adventure of technology and innovation!</p>
-        <div className="flex justify-between items-center relative mb-8">
+        <div className="relative flex items-center justify-between my-10 overflow-x-auto">
+          {/* Step Icons and Titles */}
           {steps.map((step, index) => (
-            <div key={index} className="flex flex-col items-center z-10">
-              <StepIcon
-                icon={step.icon}
-                isActive={currentStep === index}
-                isCompleted={currentStep > index}
-              />
-              <p className={`mt-2 text-sm ${currentStep === index ? 'text-[#FFD700]' : 'text-gray-300'}`}>{step.title}</p>
+            <div key={index} className="flex flex-col items-center z-10 w-1/5">
+              <div
+                className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${currentStep === index
+                  ? 'bg-[#FFD700] text-[#0B0B3B] border-2 border-[#FFA500]'
+                  : currentStep > index
+                    ? 'bg-[#FFA500] text-[#0B0B3B]'
+                    : 'bg-[#2D1B4E] text-gray-300'
+                  }`}
+              >
+                <StepIcon
+                  icon={step.icon}
+                  isActive={currentStep === index}
+                  isCompleted={currentStep > index}
+                />
+              </div>
+              <p
+                className={`mt-2 text-sm font-semibold transition-colors duration-300 ${currentStep === index ? 'text-[#FFD700]' : 'text-gray-400'
+                  }`}
+              >
+                {step.title}
+              </p>
             </div>
           ))}
-          <div className="absolute top-1/2 left-0 w-full h-1 bg-[#2D1B4E] -translate-y-1/2 z-0">
+
+          {/* Progress Bar */}
+          <div className="absolute top-1/2 left-[10%] right-[10%] h-1 bg-[#2D1B4E] -translate-y-1/2 z-0">
             <motion.div
-              className="h-full bg-[#FFD700]"
+              className="h-full bg-[#FFD700] rounded"
               initial={{ width: 0 }}
               animate={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
             />
           </div>
         </div>
+
         <form onSubmit={handleSubmit} className="space-y-6 mt-8">
           {renderStepContent()}
           <div className="flex justify-between mt-6">
-            <Button
-              type="button"
-              onClick={handlePrev}
-              disabled={currentStep === 0}
-              className="bg-[#2D1B4E] text-[#FFD700] hover:bg-[#1E0B3B] transition-all duration-300"
-            >
-              Previous
-            </Button>
+            {currentStep == 0 ? (
+              <div></div>
+            ) : (
+              <Button
+                type="button"
+                onClick={handlePrev}
+                disabled={currentStep === 0}
+                className="bg-[#2D1B4E] text-[#FFD700] hover:bg-[#1E0B3B] transition-all duration-300"
+              >
+                Previous
+              </Button>
+            )}
             {currentStep === steps.length - 1 ? (
               <Button
                 type="submit"
@@ -801,9 +1432,6 @@ export default function RegistrationForm() {
           </div>
         </form>
       </div>
-      {[...Array(20)].map((_, i) => (
-        <MagicSparkle key={i} delay={i * 0.1} />
-      ))}
     </div>
   )
 }
