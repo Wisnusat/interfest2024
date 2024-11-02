@@ -161,7 +161,7 @@ export default function WorkshopPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <Link href="#">
+            <Link href="/workshop/register">
               <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500]">
                 Register Now
               </Button>
@@ -274,7 +274,7 @@ export default function WorkshopPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Link href="/register">
+              <Link href="/workshop/register">
                 <Button size="lg" className="text-lg bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300">
                   Join the Workshop
                 </Button>
