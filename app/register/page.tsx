@@ -68,6 +68,36 @@ export default function RegistrationForm() {
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
   const [formErrors, setFormErrors] = useState<any>({});
+
+  const currentDate = new Date();
+  const batch1StartDate = new Date('2024-10-14T00:00:00');
+  const batch1EndDate = new Date('2024-11-02T23:59:59'); // End of day for Batch 1
+  const batch2StartDate = new Date('2024-11-03T00:00:00'); // Start of Batch 2
+  const batch2EndDate = new Date('2024-11-21T23:59:59'); // End of day for Batch 2
+  const [batch1Countdown, setBatch1Countdown] = useState('');
+  const [batch2Countdown, setBatch2Countdown] = useState('');
+  const calculateTimeLeft = (endDate:any) => {
+    const difference = endDate.getTime() - new Date().getTime(); // use current time at each call
+    if (difference > 0) {
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+      return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+    return 'Time is up';
+  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBatch1Countdown(calculateTimeLeft(batch1EndDate));
+      setBatch2Countdown(calculateTimeLeft(batch2EndDate));
+    }, 1000);
+
+    return () => clearInterval(timer); // Cleanup interval on component unmount
+  }, []);
+  const batch1Active = currentDate >= batch1StartDate && currentDate <= batch1EndDate;
+  const batch2Active = currentDate >= batch2StartDate && currentDate <= batch2EndDate;
+
   const [formData, setFormData] = useState<any>({
     teamName: '',
     leaderName: '',
@@ -189,92 +219,94 @@ export default function RegistrationForm() {
 
   const validateFields = () => {
     let errors: any = {};
-  
+
     // Regular expression for validating email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
     // Regular expression for validating URL
     const urlRegex = /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
 
     // Regular expression to check for numeric values only
-  const numberOnlyRegex = /^\d+$/;
+    const numberOnlyRegex = /^\d+$/;
 
     if (currentStep === 0) {
       // Team Name Validation
       if (!formData.teamName.trim()) {
         errors.teamName = "Team name is required.";
-      }
-  
+      } else if (formData.teamName.length > 30) {
+        errors.teamName = "Team name must be 30 characters or less.";
+      }      
+
       // Leader Name Validation
       if (!formData.leaderName.trim()) {
         errors.leaderName = "Leader name is required.";
       }
-  
+
       // Competition Validation
       if (!formData.competition.trim()) {
         errors.competition = "Competition field is required.";
       }
     }
-  
+
     if (currentStep === 1) {
       // Member 1 Validations
       if (!formData.member1Name.trim()) {
         errors.member1Name = "Member 1 name is required.";
       }
-  
+
       if (!formData.member1Email.trim()) {
         errors.member1Email = "Member 1 email is required.";
       } else if (!emailRegex.test(formData.member1Email)) {
         errors.member1Email = "Invalid email format.";
       }
-  
+
       if (!formData.member1Whatsapp.trim()) {
         errors.member1Whatsapp = "Member 1 Whatsapp number is required.";
       } else if (!numberOnlyRegex.test(formData.member1Whatsapp)) {
         errors.member1Whatsapp = "Phone number must contain only numbers.";
       }
-  
+
       if (!formData.member1NIM.trim()) {
         errors.member1NIM = "Member 1 NIM is required.";
       } else if (!numberOnlyRegex.test(formData.member1NIM)) {
         errors.member1NIM = "NIM must contain only numbers.";
       }
-  
+
       if (!formData.member1Semester.trim()) {
         errors.member1Semester = "Member 1 semester is required.";
       }
-  
+
       if (!formData.member1Institution.trim()) {
         errors.member1Institution = "Member 1 institution is required.";
       }
-  
+
       if (!formData.member1Faculty.trim()) {
         errors.member1Faculty = "Member 1 faculty is required.";
       }
-  
+
       if (!formData.member1Program.trim()) {
         errors.member1Program = "Member 1 program is required.";
       }
-  
+
       if (!formData.member1KSM) {
         errors.member1KSM = "Member 1 KSM is required.";
       } else if (!urlRegex.test(formData.member1KSM)) {
         errors.member1KSM = "Invalid URL KSM format.";
       }
-  
+
       if (!formData.member1Photo) {
         errors.member1Photo = "Member 1 photo is required.";
       } else if (!urlRegex.test(formData.member1Photo)) {
         errors.member1Photo = "Invalid URL Photo format.";
       }
-  
+
       if (!formData.member1KTM) {
         errors.member1KTM = "Member 1 KTM is required.";
       } else if (!urlRegex.test(formData.member1KTM)) {
         errors.member1KTM = "Invalid URL KTM format.";
       }
     }
-  
+
     if (currentStep === 2) {
       // Payment Evidence Validation
       if (!formData.paymentEvident) {
@@ -283,7 +315,7 @@ export default function RegistrationForm() {
         errors.paymentEvident = "Invalid URL Payment Evidence format.";
       }
     }
-  
+
     if (currentStep === 3) {
       // Social Media Link Validation for URLs
       if (!formData.linkUpTwibbonAnggota1.trim()) {
@@ -291,26 +323,26 @@ export default function RegistrationForm() {
       } else if (!urlRegex.test(formData.linkUpTwibbonAnggota1)) {
         errors.linkUpTwibbonAnggota1 = "Invalid URL format.";
       }
-  
+
       if (!formData.linkUpTwibbonAnggota2.trim()) {
         errors.linkUpTwibbonAnggota2 = "This field is required.";
       } else if (!urlRegex.test(formData.linkUpTwibbonAnggota2)) {
         errors.linkUpTwibbonAnggota2 = "Invalid URL format.";
       }
-  
+
       if (!formData.linkUpTwibbonAnggota3.trim()) {
         errors.linkUpTwibbonAnggota3 = "This field is required.";
       } else if (!urlRegex.test(formData.linkUpTwibbonAnggota3)) {
         errors.linkUpTwibbonAnggota3 = "Invalid URL format.";
       }
-  
+
       if (!formData.ssShareKe3GroupAnggota1) {
         errors.ssShareKe3GroupAnggota1 = "This field is required.";
       } else if (!urlRegex.test(formData.ssShareKe3GroupAnggota1)) {
         errors.ssShareKe3GroupAnggota1 = "Invalid URL format.";
       }
     }
-  
+
     // Set errors and return validation result
     setFormErrors(errors);
     return Object.keys(errors).length === 0; // Returns true if no errors
@@ -472,6 +504,38 @@ export default function RegistrationForm() {
                 {formErrors.competition && <span className="text-red-500">{formErrors.competition}</span>}
               </div>
             </div>
+            {/* <div className="space-y-2">
+              <Label className="text-sm font-bold" htmlFor="competition">Lomba Yang Diikuti</Label>
+
+              <div className="flex space-x-4">
+                {['competitive-programming', 'capture-the-flag', 'web-design'].map((competition) => (
+                  <button
+                    key={competition}
+                    type="button"
+                    onClick={() => {
+                      setFormData((prev: any) => ({ ...prev, competition }));
+                      if (formErrors['competition']) {
+                        setFormErrors((prevErrors: any) => {
+                          const newErrors = { ...prevErrors };
+                          delete newErrors['competition'];
+                          return newErrors;
+                        });
+                      }
+                    }}
+                    className={`px-4 py-2 rounded-md font-medium transition-colors duration-200 ${formData.competition === competition
+                      ? 'bg-[#FFD700] text-[#0B0B3B]'
+                      : 'bg-[#2D1B4E] text-gray-100 hover:bg-[#FFD700] hover:text-[#0B0B3B]'
+                      }`}
+                  >
+                    {competition === 'competitive-programming' && 'Competitive Programming'}
+                    {competition === 'capture-the-flag' && 'Capture The Flag'}
+                    {competition === 'web-design' && 'Web Design'}
+                  </button>
+                ))}
+              </div>
+
+              {formErrors.competition && <span className="text-red-500">{formErrors.competition}</span>}
+            </div> */}
           </>
         )
       case 1:
@@ -484,7 +548,7 @@ export default function RegistrationForm() {
                   value={member}
                   className="p-2 rounded-md font-semibold transition-all duration-300 ease-in-out data-[state=active]:bg-[#FFD700] data-[state=active]:text-[#0B0B3B] hover:bg-[#FFD700] hover:text-[#0B0B3B]"
                 >
-                  {`Member ${idx + 1}`}
+                  {`${idx == 0 ? "*" : ""}Member ${idx + 1}`}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -1154,14 +1218,54 @@ export default function RegistrationForm() {
                     {/* Collapsible Content */}
                     {expandedMember === index && (
                       <div className="mt-3 space-y-2 text-sm">
-                        <p><span className="font-semibold text-gray-300">Name:</span> {formData[`member${index}Name`] || 'Not provided'}</p>
-                        <p><span className="font-semibold text-gray-300">Email:</span> {formData[`member${index}Email`] || 'Not provided'}</p>
-                        <p><span className="font-semibold text-gray-300">Whatsapp:</span> {formData[`member${index}Whatsapp`] || 'Not provided'}</p>
-                        <p><span className="font-semibold text-gray-300">NIM:</span> {formData[`member${index}NIM`] || 'Not provided'}</p>
-                        <p><span className="font-semibold text-gray-300">Semester:</span> {formData[`member${index}Semester`] || 'Not provided'}</p>
-                        <p><span className="font-semibold text-gray-300">Institution:</span> {formData[`member${index}Institution`] || 'Not provided'}</p>
-                        <p><span className="font-semibold text-gray-300">Faculty:</span> {formData[`member${index}Faculty`] || 'Not provided'}</p>
-                        <p><span className="font-semibold text-gray-300">Program:</span> {formData[`member${index}Program`] || 'Not provided'}</p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Name:</span>{' '}
+                          <span className={formData[`member${index}Name`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}Name`] || 'Not provided'}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Email:</span>{' '}
+                          <span className={formData[`member${index}Email`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}Email`] || 'Not provided'}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Whatsapp:</span>{' '}
+                          <span className={formData[`member${index}Whatsapp`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}Whatsapp`] || 'Not provided'}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">NIM:</span>{' '}
+                          <span className={formData[`member${index}NIM`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}NIM`] || 'Not provided'}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Semester:</span>{' '}
+                          <span className={formData[`member${index}Semester`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}Semester`] || 'Not provided'}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Institution:</span>{' '}
+                          <span className={formData[`member${index}Institution`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}Institution`] || 'Not provided'}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Faculty:</span>{' '}
+                          <span className={formData[`member${index}Faculty`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}Faculty`] || 'Not provided'}
+                          </span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-gray-300">Program:</span>{' '}
+                          <span className={formData[`member${index}Program`] ? 'text-gray-300' : 'text-red-500'}>
+                            {formData[`member${index}Program`] || 'Not provided'}
+                          </span>
+                        </p>
                         <p>
                           <span className="font-semibold text-gray-300">KSM:</span>{' '}
                           {formData[`member${index}KSM`] ? (
@@ -1174,7 +1278,7 @@ export default function RegistrationForm() {
                               {formData[`member${index}KSM`]}
                             </a>
                           ) : (
-                            'Not provided'
+                            <span className="text-red-500">Not provided</span>
                           )}
                         </p>
                         <p>
@@ -1189,7 +1293,7 @@ export default function RegistrationForm() {
                               {formData[`member${index}Photo`]}
                             </a>
                           ) : (
-                            'Not provided'
+                            <span className="text-red-500">Not provided</span>
                           )}
                         </p>
                         <p>
@@ -1204,12 +1308,12 @@ export default function RegistrationForm() {
                               {formData[`member${index}KTM`]}
                             </a>
                           ) : (
-                            'Not provided'
+                            <span className="text-red-500">Not provided</span>
                           )}
                         </p>
-
                       </div>
                     )}
+
                   </div>
                 ))}
               </div>
@@ -1231,7 +1335,7 @@ export default function RegistrationForm() {
                       {formData.paymentEvident}
                     </a>
                   ) : (
-                    'Not uploaded'
+                    <span className="text-red-500">Not provided</span>
                   )}
                 </p>
               </div>
@@ -1253,7 +1357,7 @@ export default function RegistrationForm() {
                       {formData.linkUpTwibbonAnggota1}
                     </a>
                   ) : (
-                    'Not provided'
+                    <span className="text-red-500">Not provided</span>
                   )}
                 </p>
                 <p>
@@ -1263,7 +1367,7 @@ export default function RegistrationForm() {
                       {formData.linkUpTwibbonAnggota2}
                     </a>
                   ) : (
-                    'Not provided'
+                    <span className="text-red-500">Not provided</span>
                   )}
                 </p>
                 <p>
@@ -1273,7 +1377,7 @@ export default function RegistrationForm() {
                       {formData.linkUpTwibbonAnggota3}
                     </a>
                   ) : (
-                    'Not provided'
+                    <span className="text-red-500">Not provided</span>
                   )}
                 </p>
                 <p>
@@ -1283,7 +1387,7 @@ export default function RegistrationForm() {
                       {formData.ssShareKe3GroupAnggota1}
                     </a>
                   ) : (
-                    'Not provided'
+                    <span className="text-red-500">Not provided</span>
                   )}
                 </p>
                 <p>
@@ -1293,7 +1397,7 @@ export default function RegistrationForm() {
                       {formData.ssShareKe3GroupAnggota2}
                     </a>
                   ) : (
-                    'Not provided'
+                    <span className="text-red-500">Not provided</span>
                   )}
                 </p>
                 <p>
@@ -1303,7 +1407,7 @@ export default function RegistrationForm() {
                       {formData.ssShareKe3GroupAnggota3}
                     </a>
                   ) : (
-                    'Not provided'
+                    <span className="text-red-500">Not provided</span>
                   )}
                 </p>
               </div>
@@ -1316,9 +1420,21 @@ export default function RegistrationForm() {
                   onCheckedChange={(checked) => setFormData((prev: any) => ({ ...prev, agreeTerms: checked }))}
                   required
                 />
-                <label htmlFor="agreeTerms" className="text-sm text-gray-100">
+                {/* <label htmlFor="agreeTerms" className="text-sm text-gray-100">
                   I agree to the terms and conditions
+                </label> */}
+                <label htmlFor="agreeTerms" className="text-sm text-gray-100">
+                  I agree to the{' '}
+                  <a
+                    href="https://drive.google.com/file/d/1laxNmhntFaoGOPbx7Ne0OFQO9zbXZFZN/view"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#FFD700] underline hover:text-[#FFA500] transition-colors"
+                  >
+                    terms and conditions
+                  </a>
                 </label>
+
               </div>
             </div>
           </>
@@ -1355,6 +1471,61 @@ export default function RegistrationForm() {
         <FloatingIcon icon={WandIcon} />
         <h1 className="text-3xl font-bold text-[#FFD700] mb-2 text-center">Register for INTERFEST 2024</h1>
         <p className="text-lg mb-6 text-center">Join us in this magical adventure of technology and innovation!</p>
+
+        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-7 justify-center text-center">
+          {/* Batch 1 Card */}
+          <div
+            className={`w-full md:w-1/2 p-6 rounded-lg shadow-lg transition-transform duration-300 ${batch1Active ? 'bg-[#2D1B4E] text-[#FFD700] transform scale-105' : 'bg-[#1E0B3B] text-gray-400 hidden'
+              } hover:shadow-xl`}
+          >
+            <h2 className="text-lg font-semibold mb-1">Batch 1</h2>
+            <p className="text-sm mb-1">Rp50.000,- per team</p>
+            <p className="text-xs mb-2 text-gray-300">14 Oct 2024 - 2 Nov 2024</p>
+
+            <p
+              className="text-sm font-medium tooltip relative"
+              title="Batch 1 will end on 2 Nov 2024 at 23:59"
+            >
+              {batch1Active ? batch1Countdown : currentDate < batch1StartDate ? 'Starts soon' : 'Batch ended'}
+            </p>
+
+            {/* Tooltip Style */}
+            <style jsx>{`
+              .tooltip:hover::after {
+                content: attr(title);
+                position: absolute;
+                bottom: -2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.75);
+                color: #FFD700;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                border-radius: 4px;
+                white-space: nowrap;
+              }
+            `}</style>
+          </div>
+
+          {/* Batch 2 Card */}
+          <div
+            className={`w-full md:w-1/2 p-6 rounded-lg shadow-lg transition-transform duration-300 ${batch2Active ? 'bg-[#2D1B4E] text-[#FFD700] transform scale-105' : 'bg-[#1E0B3B] text-gray-400 md:block hidden'
+              } hover:shadow-xl`}
+          >
+            <h2 className="text-lg font-semibold mb-1">Batch 2</h2>
+            <p className="text-sm mb-1">Rp75.000,- per team</p>
+            <p className="text-xs mb-2 text-gray-300">3 Nov 2024 - 21 Nov 2024</p>
+
+            <p
+              className="text-sm font-medium tooltip relative"
+              title="Batch 2 will end on 21 Nov 2024 at 23:59"
+            >
+              {batch2Active ? batch2Countdown : currentDate < batch2StartDate ? 'Starts soon' : 'Batch ended'}
+            </p>
+          </div>
+        </div>
+
+
         <div className="relative flex items-center justify-between my-10 overflow-x-auto">
           {/* Step Icons and Titles */}
           {steps.map((step, index) => (
