@@ -44,7 +44,9 @@ export default function WorkshopRegistrationForm() {
     ssBuktiShareGrup2: null,
     ssBuktiShareGrup3: null,
     buktiUpTwibbon: null,
-    kodeReferral: ''
+    kodeReferral: '',
+    noTelp: '',
+    usernameIG: ''
   })
   const [formErrors, setFormErrors] = useState<any>({})
   const [isSuccess, setIsSuccess] = useState(false)
@@ -113,6 +115,7 @@ export default function WorkshopRegistrationForm() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("work")
     e.preventDefault();
     if (validateFields()) {
       toast({
@@ -191,6 +194,7 @@ export default function WorkshopRegistrationForm() {
           description: error?.message || "An error occurred. Please try again.",
         });
       } finally {
+        console.log(updatedFormData);
         setLoading(false);
       }
     }
@@ -209,6 +213,18 @@ export default function WorkshopRegistrationForm() {
       }
     }
   }
+
+  const renderFilePreview = (file: any) => {
+    if (!file) return null;
+    return (
+      <div className="mt-2 w-full">
+        <p className="text-xs text-gray-200">Selected file: {file.name}</p>
+        {file.type.startsWith('image/') && (
+          <img src={URL.createObjectURL(file)} alt="Preview" className="mt-1 w-1/2 h-auto object-cover border border-[#FFD700]" />
+        )}
+      </div>
+    );
+  };
 
   if (isSuccess) return <SuccessPage />
   return (
@@ -233,20 +249,6 @@ export default function WorkshopRegistrationForm() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-bold">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.email && <span className="text-red-500 text-xs">{formErrors.email}</span>}
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="namaLengkap" className="text-sm font-bold">Nama Lengkap</Label>
                 <Input
                   id="namaLengkap"
@@ -261,6 +263,20 @@ export default function WorkshopRegistrationForm() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-bold">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                />
+                {formErrors.email && <span className="text-red-500 text-xs">{formErrors.email}</span>}
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="asalInstansi" className="text-sm font-bold">Asal Instansi</Label>
                 <Input
                   id="asalInstansi"
@@ -272,6 +288,34 @@ export default function WorkshopRegistrationForm() {
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
                 {formErrors.asalInstansi && <span className="text-red-500 text-xs">{formErrors.asalInstansi}</span>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="noTelp" className="text-sm font-bold">No Telp/WA Aktif</Label>
+                <Input
+                  id="noTelp"
+                  name="noTelp"
+                  placeholder="Enter your telp/wa number"
+                  value={formData.noTelp}
+                  onChange={handleInputChange}
+                  required
+                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                />
+                {formErrors.noTelp && <span className="text-red-500 text-xs">{formErrors.noTelp}</span>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="usernameIG" className="text-sm font-bold">Username Instagram</Label>
+                <Input
+                  id="usernameIG"
+                  name="usernameIG"
+                  placeholder="Enter your institution"
+                  value={formData.usernameIG}
+                  onChange={handleInputChange}
+                  required
+                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
+                />
+                {formErrors.usernameIG && <span className="text-red-500 text-xs">{formErrors.usernameIG}</span>}
               </div>
             </div>
 
@@ -293,6 +337,7 @@ export default function WorkshopRegistrationForm() {
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
                 {formErrors.buktiFollowHIMAIF && <span className="text-red-500 text-xs">{formErrors.buktiFollowHIMAIF}</span>}
+                {renderFilePreview(formData.buktiFollowHIMAIF)}
               </div>
 
               <div className="space-y-2">
@@ -306,19 +351,12 @@ export default function WorkshopRegistrationForm() {
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
                 {formErrors.buktiFollowInterfest && <span className="text-red-500 text-xs">{formErrors.buktiFollowInterfest}</span>}
+                {renderFilePreview(formData.buktiFollowInterfest)}
               </div>
 
               <div className="space-y-2">
                 <div className="flex flex-col space-y-1">
                   <Label htmlFor="buktiSharePoster" className="text-sm font-bold">Bukti Share Poster di Insta Story</Label>
-                  <a
-                    href="https://drive.google.com/drive/folders/1KD0R5Bj7cXKWNDGL2QR-HyL0WmPu199y?usp=sharing"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#FFD700] underline hover:text-[#FFA500] transition"
-                  >
-                    https://bit.ly/PosterWorkshop2024
-                  </a>
                 </div>
                 <Input
                   id="buktiSharePoster"
@@ -328,7 +366,17 @@ export default function WorkshopRegistrationForm() {
                   required={true}
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
+                <span className='text-[#FFD700]'>*</span>
+                  <a
+                    href="https://drive.google.com/drive/folders/1KD0R5Bj7cXKWNDGL2QR-HyL0WmPu199y?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#FFD700] underline hover:text-[#FFA500] transition"
+                  >
+                    https://bit.ly/PosterWorkshop2024
+                  </a>
                 {formErrors.buktiSharePoster && <span className="text-red-500 text-xs">{formErrors.buktiSharePoster}</span>}
+                {renderFilePreview(formData.buktiSharePoster)}
               </div>
 
               <div className="space-y-2">
@@ -341,7 +389,8 @@ export default function WorkshopRegistrationForm() {
                   required={true}
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
-                {formErrors.ssBuktiShareGrup && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGrup}</span>}
+                {formErrors.ssBuktiShareGrup1 && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGrup1}</span>}
+                {renderFilePreview(formData.ssBuktiShareGrup1)}
               </div>
 
               <div className="space-y-2">
@@ -354,7 +403,8 @@ export default function WorkshopRegistrationForm() {
                   required={true}
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
-                {formErrors.ssBuktiShareGrup && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGrup}</span>}
+                {formErrors.ssBuktiShareGrup2 && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGru2p}</span>}
+                {renderFilePreview(formData.ssBuktiShareGrup2)}
               </div>
 
               <div className="space-y-2">
@@ -367,20 +417,15 @@ export default function WorkshopRegistrationForm() {
                   required={true}
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
-                {formErrors.ssBuktiShareGrup && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGrup}</span>}
+                {formErrors.ssBuktiShareGrup3 && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGrup3}</span>}
+                {renderFilePreview(formData.ssBuktiShareGrup3)}
               </div>
 
               <div className="space-y-2">
                 <div className="flex flex-col space-y-1">
                   <Label htmlFor="buktiUpTwibbon" className="text-sm font-bold">Bukti Up Twibbon</Label>
-                  <a
-                    href="https://drive.google.com/drive/folders/1KD0R5Bj7cXKWNDGL2QR-HyL0WmPu199y?usp=sharing"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#FFD700] underline hover:text-[#FFA500] transition"
-                  >
-                    https://bit.ly/TwibbonInterfest2024
-                  </a>
+                  <div>
+                  </div>
                 </div>
                 <Input
                   id="buktiUpTwibbon"
@@ -390,7 +435,17 @@ export default function WorkshopRegistrationForm() {
                   required={true}
                   className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
                 />
+                  <span className='text-[#FFD700]'>*</span>
+                  <a
+                    href="https://drive.google.com/drive/folders/1KD0R5Bj7cXKWNDGL2QR-HyL0WmPu199y?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#FFD700] underline hover:text-[#FFA500] transition"
+                  >
+                    https://bit.ly/TwibbonInterfest2024
+                  </a>
                 {formErrors.buktiUpTwibbon && <span className="text-red-500 text-xs">{formErrors.buktiUpTwibbon}</span>}
+                {renderFilePreview(formData.buktiUpTwibbon)}
               </div>
             </div>
 
