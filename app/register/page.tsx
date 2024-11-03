@@ -1514,7 +1514,7 @@ export default function RegistrationForm() {
               } hover:shadow-xl`}
           >
             <h2 className="text-lg font-semibold mb-1">Batch 2</h2>
-            <p className="text-sm mb-1">Rp75.000,- per team</p>
+            <p className="text-sm mb-1">Rp65.000,- per team</p>
             <p className="text-xs mb-2 text-gray-300">3 Nov 2024 - 21 Nov 2024</p>
 
             <p
