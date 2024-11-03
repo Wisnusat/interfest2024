@@ -867,6 +867,7 @@ export default function RegistrationForm() {
                 <button
                   onClick={copyAccountNumber}
                   className="ml-2 flex items-center text-sm text-[#FFD700] hover:text-[#FFA500] transition"
+                  type="button"
                 >
                   <CopyIcon className="w-4 h-4 mr-1" />
                   {isCopied ? 'Copied!' : 'Copy'}
