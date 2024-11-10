@@ -36,7 +36,7 @@ We are thrilled ${userData.teamName} to have you on board and look forward to se
 
 To stay updated with important announcements, discussions, and the competition schedule, please join our official Discord server through the link below:
 
-📌 [Join our Discord Server](https://discord.gg/9B4w95MekM)
+📌 [Join our Discord Server](https://discord.gg/5XfsrPYmUa)
 
 If you have any questions, feel free to ask directly on the Discord server or contact us through:
 - Line: cecaciww (Yesi)
