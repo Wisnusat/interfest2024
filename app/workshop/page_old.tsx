@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpenIcon, CodeIcon, AwardIcon, UsersIcon, CalendarIcon, ClockIcon, XCircle } from "lucide-react"
+import { BookOpenIcon, CodeIcon, AwardIcon, UsersIcon, CalendarIcon, ClockIcon } from "lucide-react"
 import Link from "next/link"
 import Header from '@/components/ui/header'
 
@@ -156,7 +156,7 @@ export default function WorkshopPage() {
           >
             Frontend Fundamentals: Code Your Way to the Top
           </motion.p>
-          {/* <motion.div
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -179,31 +179,7 @@ export default function WorkshopPage() {
                 <span key={`${unit}-${value}`}>{value}{unit.charAt(0)}</span>
               ))}
             </div>
-          </motion.div> */}
-          <div className="max-w-4xl mx-auto mb-12 pt-5">
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-[#1E0B3B] p-8 rounded-lg"
-            >
-              <div className="flex flex-col items-center space-y-6">
-                {/* <XCircle className="text-[#FFD700] w-24 h-24" /> */}
-                <h2 className="text-2xl font-bold text-[#FFD700]">Registration Closed</h2>
-                <div className="w-full max-w-md space-y-2">
-                  <p className="text-center text-gray-300">
-                    Follow our Instagram account for the latest news and announcements.
-                  </p>
-                  <Button
-                    className="w-full bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
-                    onClick={() => window.open('https://www.instagram.com/interfest_if', '_blank')}
-                  >
-                    Follow on Instagram
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          </motion.div>
         </section>
 
         <section id="workshop-details" className="py-12 md:py-24 p-4 md:p-6 relative overflow-hidden">
@@ -293,7 +269,7 @@ export default function WorkshopPage() {
               <li>Certificate of completion</li>
               <li>Group discussions and networking</li>
             </motion.ul>
-            {/* <motion.div
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -303,7 +279,7 @@ export default function WorkshopPage() {
                   Join the Workshop
                 </Button>
               </Link>
-            </motion.div> */}
+            </motion.div>
           </div>
         </section>
       </main>

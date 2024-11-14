@@ -1,15 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useToast } from '@/components/hooks/use-toast'
-import { useRouter } from 'next/navigation'
 import Header from '@/components/ui/header'
-import { BookOpenIcon } from 'lucide-react'
-import SuccessPage from '@/components/layout/SuccessWorkshop'
+import { BookOpenIcon, XCircle } from 'lucide-react'
 
 const FloatingIcon = ({ icon: Icon, ...props }: any) => (
   <motion.div
@@ -29,456 +26,36 @@ const FloatingIcon = ({ icon: Icon, ...props }: any) => (
   </motion.div>
 )
 
-export default function WorkshopRegistrationForm() {
-  const router = useRouter()
-  const { toast }: any = useToast()
-  const [loading, setLoading] = useState(false)
-  const [formData, setFormData] = useState<any>({
-    email: '',
-    namaLengkap: '',
-    asalInstansi: '',
-    buktiFollowHIMAIF: null,
-    buktiFollowInterfest: null,
-    buktiSharePoster: null,
-    ssBuktiShareGrup1: null,
-    ssBuktiShareGrup2: null,
-    ssBuktiShareGrup3: null,
-    buktiUpTwibbon: null,
-    kodeReferral: '',
-    noTelp: '',
-    usernameIG: ''
-  })
-  const [formErrors, setFormErrors] = useState<any>({})
-  const [isSuccess, setIsSuccess] = useState(false)
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev: any) => ({ ...prev, [name]: value }))
-    if (formErrors[name]) {
-      setFormErrors((prevErrors: any) => {
-        const newErrors = { ...prevErrors };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  }
-
-  const validateFields = () => {
-    let errors: any = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const urlRegex = /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
-
-    if (!formData.email.trim()) {
-      errors.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      errors.email = "Invalid email format.";
-    }
-
-    if (!formData.namaLengkap.trim()) {
-      errors.namaLengkap = "Nama Lengkap is required.";
-    }
-
-    if (!formData.asalInstansi.trim()) {
-      errors.asalInstansi = "Asal Instansi is required.";
-    }
-
-    if (!formData.buktiFollowHIMAIF) {
-      errors.buktiFollowHIMAIF = "Bukti follow akun HIMA IF is required.";
-    }
-
-    if (!formData.buktiFollowInterfest) {
-      errors.buktiFollowInterfest = "Bukti follow Interfest is required.";
-    }
-
-    if (!formData.buktiSharePoster) {
-      errors.buktiSharePoster = "Bukti share poster di feed is required.";
-    }
-
-    if (!formData.ssBuktiShareGrup1) {
-      errors.ssBuktiShareGrup = "SS bukti share ke grup is required.";
-    }
-
-    if (!formData.ssBuktiShareGrup2) {
-      errors.ssBuktiShareGrup = "SS bukti share ke grup is required.";
-    }
-
-    if (!formData.ssBuktiShareGrup3) {
-      errors.ssBuktiShareGrup = "SS bukti share ke grup is required.";
-    }
-
-    if (!formData.buktiUpTwibbon) {
-      errors.buktiUpTwibbon = "Bukti up twibbon is required.";
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("work")
-    e.preventDefault();
-    if (validateFields()) {
-      toast({
-        title: "Casting the spell of submission...",
-        description: "Please hold while the magic takes effect!"
-      });
-
-      setLoading(true);
-
-      // Prepare to upload files and get their URLs
-      const fileFields = [
-        'buktiFollowHIMAIF', 'buktiFollowInterfest', 'buktiSharePoster', 'ssBuktiShareGrup1', 'buktiUpTwibbon', 'ssBuktiShareGrup2', 'ssBuktiShareGrup3'
-      ];
-
-      const updatedFormData = { ...formData };
-
-      // Upload files and update formData with URLs
-      for (const field of fileFields) {
-        if (formData[field]) {
-          const fileData = new FormData();
-          fileData.append('file', formData[field]);
-
-          let uploadResponse;
-          let attempts = 0;
-          const maxAttempts = 3; // Set the maximum number of retry attempts
-
-          // Retry logic with exponential backoff
-          while (attempts < maxAttempts) {
-            uploadResponse = await fetch('/api/upload', {
-              method: 'POST',
-              body: fileData,
-            });
-
-            if (uploadResponse.ok) {
-              const uploadResult = await uploadResponse.json();
-              updatedFormData[field] = uploadResult.viewLink; // Assuming the response contains the file URL
-              console.log('success upload file');
-              break; // Exit the retry loop on success
-            } else {
-              attempts++;
-              if (attempts < maxAttempts) {
-                const delay = Math.pow(2, attempts) * 100; // Exponential backoff
-                await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
-              } else {
-                toast({
-                  title: `Error uploading ${field}`,
-                  description: uploadResponse.statusText || "",
-                });
-              }
-            }
-          }
-        }
-      }
-
-      try {
-        const response = await fetch(process.env.NEXT_PUBLIC_WORKSHOP_SHEET_URL || '', {
-          method: 'POST',
-          headers: {
-            "Content-Type": "text/plain"
-          },
-          body: JSON.stringify(updatedFormData),
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        toast({
-          title: "Registration Successful",
-          description: "Your workshop registration has been submitted successfully!"
-        });
-        setIsSuccess(true);
-      } catch (error: any) {
-        toast({
-          title: "Error submitting form",
-          description: error?.message || "An error occurred. Please try again.",
-        });
-      } finally {
-        console.log(updatedFormData);
-        setLoading(false);
-      }
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target
-    if (files) {
-      setFormData((prev: any) => ({ ...prev, [name]: files[0] }))
-      if (formErrors[name]) {
-        setFormErrors((prevErrors: any) => {
-          const newErrors = { ...prevErrors };
-          delete newErrors[name];
-          return newErrors;
-        });
-      }
-    }
-  }
-
-  const renderFilePreview = (file: any) => {
-    if (!file) return null;
-    return (
-      <div className="mt-2 w-full">
-        <p className="text-xs text-gray-200">Selected file: {file.name}</p>
-        {file.type.startsWith('image/') && (
-          <img src={URL.createObjectURL(file)} alt="Preview" className="mt-1 w-1/2 h-auto object-cover border border-[#FFD700]" />
-        )}
-      </div>
-    );
-  };
-
-  if (isSuccess) return <SuccessPage />
+export default function ClosedWorkshopRegistration() {
   return (
     <div className="bg-gradient-to-b from-[#0B0B3B] via-[#1E0B3B] to-[#0B0B3B] min-h-screen text-gray-100 font-sans overflow-x-hidden py-20 px-4">
       <Header />
       <div className="max-w-4xl mx-auto mb-12 pt-12">
         <FloatingIcon className="hidden md:block" icon={BookOpenIcon} />
         <h1 className="text-3xl font-bold text-[#FFD700] mb-2 text-center">Workshop Registration</h1>
-        <p className="text-lg mb-6 text-center">Join us for an exciting workshop experience!</p>
+        <p className="text-lg mb-6 text-center">We're sorry, but registration is currently closed.</p>
 
         <motion.div
-          //   className="bg-[#1E0B3B] p-8 rounded-lg shadow-lg"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="bg-[#1E0B3B] p-8 rounded-lg shadow-lg"
         >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex items-center my-6 mt-20">
-              <div className="flex-grow border-t border-[#FFD700]"></div>
-              <span className="mx-4 text-[#FFD700] font-bold">Personal Information</span>
-              <div className="flex-grow border-t border-[#FFD700]"></div>
+          <div className="flex flex-col items-center space-y-6">
+            <XCircle className="text-[#FFD700] w-24 h-24" />
+            <h2 className="text-2xl font-bold text-[#FFD700]">Registration Closed</h2>
+            <div className="w-full max-w-md space-y-2">
+              <p className="text-center text-gray-300">
+                Follow our Instagram account for the latest news and announcements.
+              </p>
+              <Button 
+                className="w-full bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
+                onClick={() => window.open('https://www.instagram.com/interfest_if', '_blank')}
+              >
+                Follow on Instagram
+              </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="namaLengkap" className="text-sm font-bold">Nama Lengkap</Label>
-                <Input
-                  id="namaLengkap"
-                  name="namaLengkap"
-                  placeholder="Enter your full name"
-                  value={formData.namaLengkap}
-                  onChange={handleInputChange}
-                  required
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.namaLengkap && <span className="text-red-500 text-xs">{formErrors.namaLengkap}</span>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-bold">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.email && <span className="text-red-500 text-xs">{formErrors.email}</span>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="asalInstansi" className="text-sm font-bold">Asal Instansi</Label>
-                <Input
-                  id="asalInstansi"
-                  name="asalInstansi"
-                  placeholder="Enter your institution"
-                  value={formData.asalInstansi}
-                  onChange={handleInputChange}
-                  required
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.asalInstansi && <span className="text-red-500 text-xs">{formErrors.asalInstansi}</span>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="noTelp" className="text-sm font-bold">No Telp/WA Aktif</Label>
-                <Input
-                  id="noTelp"
-                  name="noTelp"
-                  placeholder="Enter your telp/wa number"
-                  value={formData.noTelp}
-                  onChange={handleInputChange}
-                  required
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.noTelp && <span className="text-red-500 text-xs">{formErrors.noTelp}</span>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="usernameIG" className="text-sm font-bold">Username Instagram</Label>
-                <Input
-                  id="usernameIG"
-                  name="usernameIG"
-                  placeholder="Enter your institution"
-                  value={formData.usernameIG}
-                  onChange={handleInputChange}
-                  required
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.usernameIG && <span className="text-red-500 text-xs">{formErrors.usernameIG}</span>}
-              </div>
-            </div>
-
-            <div className="flex items-center my-6 mt-20">
-              <div className="flex-grow border-t border-[#FFD700]"></div>
-              <span className="mx-4 text-[#FFD700] font-bold">Social Media</span>
-              <div className="flex-grow border-t border-[#FFD700]"></div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="buktiFollowHIMAIF" className="text-sm font-bold">Bukti Follow Akun HIMA IF</Label>
-                <Input
-                  id="buktiFollowHIMAIF"
-                  name="buktiFollowHIMAIF"
-                  type="file"
-                  onChange={handleFileChange}
-                  required={true}
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.buktiFollowHIMAIF && <span className="text-red-500 text-xs">{formErrors.buktiFollowHIMAIF}</span>}
-                {renderFilePreview(formData.buktiFollowHIMAIF)}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="buktiFollowInterfest" className="text-sm font-bold">Bukti Follow Interfest</Label>
-                <Input
-                  id="buktiFollowInterfest"
-                  name="buktiFollowInterfest"
-                  type="file"
-                  onChange={handleFileChange}
-                  required={true}
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.buktiFollowInterfest && <span className="text-red-500 text-xs">{formErrors.buktiFollowInterfest}</span>}
-                {renderFilePreview(formData.buktiFollowInterfest)}
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex flex-col space-y-1">
-                  <Label htmlFor="buktiSharePoster" className="text-sm font-bold">Bukti Share Poster di Insta Story</Label>
-                </div>
-                <Input
-                  id="buktiSharePoster"
-                  name="buktiSharePoster"
-                  type="file"
-                  onChange={handleFileChange}
-                  required={true}
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                <span className='text-[#FFD700]'>*</span>
-                  <a
-                    href="https://drive.google.com/drive/folders/1KD0R5Bj7cXKWNDGL2QR-HyL0WmPu199y?usp=sharing"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#FFD700] underline hover:text-[#FFA500] transition"
-                  >
-                    https://bit.ly/PosterWorkshop2024
-                  </a>
-                {formErrors.buktiSharePoster && <span className="text-red-500 text-xs">{formErrors.buktiSharePoster}</span>}
-                {renderFilePreview(formData.buktiSharePoster)}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="ssBuktiShareGrup" className="text-sm font-bold">SS Bukti Share ke Grup 1</Label>
-                <Input
-                  id="ssBuktiShareGrup1"
-                  name="ssBuktiShareGrup1"
-                  type="file"
-                  onChange={handleFileChange}
-                  required={true}
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.ssBuktiShareGrup1 && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGrup1}</span>}
-                {renderFilePreview(formData.ssBuktiShareGrup1)}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="ssBuktiShareGrup" className="text-sm font-bold">SS Bukti Share ke Grup 2</Label>
-                <Input
-                  id="ssBuktiShareGrup2"
-                  name="ssBuktiShareGrup2"
-                  type="file"
-                  onChange={handleFileChange}
-                  required={true}
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.ssBuktiShareGrup2 && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGru2p}</span>}
-                {renderFilePreview(formData.ssBuktiShareGrup2)}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="ssBuktiShareGrup" className="text-sm font-bold">SS Bukti Share ke Grup 3</Label>
-                <Input
-                  id="ssBuktiShareGrup3"
-                  name="ssBuktiShareGrup3"
-                  type="file"
-                  onChange={handleFileChange}
-                  required={true}
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                {formErrors.ssBuktiShareGrup3 && <span className="text-red-500 text-xs">{formErrors.ssBuktiShareGrup3}</span>}
-                {renderFilePreview(formData.ssBuktiShareGrup3)}
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex flex-col space-y-1">
-                  <Label htmlFor="buktiUpTwibbon" className="text-sm font-bold">Bukti Up Twibbon</Label>
-                  <div>
-                  </div>
-                </div>
-                <Input
-                  id="buktiUpTwibbon"
-                  name="buktiUpTwibbon"
-                  type="file"
-                  onChange={handleFileChange}
-                  required={true}
-                  className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-                />
-                  <span className='text-[#FFD700]'>*</span>
-                  <a
-                    href="https://drive.google.com/drive/folders/1KD0R5Bj7cXKWNDGL2QR-HyL0WmPu199y?usp=sharing"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#FFD700] underline hover:text-[#FFA500] transition"
-                  >
-                    https://bit.ly/TwibbonInterfest2024
-                  </a>
-                {formErrors.buktiUpTwibbon && <span className="text-red-500 text-xs">{formErrors.buktiUpTwibbon}</span>}
-                {renderFilePreview(formData.buktiUpTwibbon)}
-              </div>
-            </div>
-
-            <div className="flex items-center my-6 mt-20">
-              <div className="flex-grow border-t border-[#FFD700]"></div>
-              <span className="mx-4 text-[#FFD700] font-bold">Additional</span>
-              <div className="flex-grow border-t border-[#FFD700]"></div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="kodeReferral" className="text-sm font-bold">Kode Referral</Label>
-              <Input
-                id="kodeReferral"
-                name="kodeReferral"
-                placeholder="Enter referral code"
-                value={formData.kodeReferral}
-                onChange={handleInputChange}
-                className="bg-[#2D1B4E] border-[#FFD700] text-gray-100"
-              />
-              {formErrors.kodeReferral && <span className="text-red-500 text-xs">{formErrors.kodeReferral}</span>}
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="loader"></span>
-              ) : (
-                'Submit Workshop Registration'
-              )}
-            </Button>
-          </form>
+          </div>
         </motion.div>
       </div>
     </div>
