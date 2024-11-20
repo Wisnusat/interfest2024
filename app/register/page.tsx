@@ -268,8 +268,6 @@ export default function RegistrationForm() {
 
       if (!formData.member1NIM.trim()) {
         errors.member1NIM = "Member 1 NIM is required.";
-      } else if (!numberOnlyRegex.test(formData.member1NIM)) {
-        errors.member1NIM = "NIM must contain only numbers.";
       }
 
       if (!formData.member1Semester.trim()) {
