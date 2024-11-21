@@ -1470,30 +1470,134 @@ export default function RegistrationForm() {
         <FloatingIcon icon={WandIcon} />
         <h1 className="text-3xl font-bold text-[#FFD700] mb-2 text-center">Register for INTERFEST 2024</h1>
         <p className="text-lg mb-6 text-center">Join us in this magical adventure of technology and innovation!</p>
-        <div className="max-w-4xl mx-auto mb-12 pt-5">
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-[#1E0B3B] p-8 rounded-lg"
+
+        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-7 justify-center text-center">
+       
+          <div
+            className={`w-full md:w-1/2 p-6 rounded-lg shadow-lg transition-transform duration-300 ${batch1Active ? 'bg-[#2D1B4E] text-[#FFD700] transform scale-105' : 'bg-[#1E0B3B] text-gray-400 hidden'
+              } hover:shadow-xl`}
+          >
+            <h2 className="text-lg font-semibold mb-1">Batch 1</h2>
+            <p className="text-sm mb-1">Rp50.000,- per team</p>
+            <p className="text-xs mb-2 text-gray-300">14 Oct 2024 - 2 Nov 2024</p>
+
+            <p
+              className="text-sm font-medium tooltip relative"
+              title="Batch 1 will end on 2 Nov 2024 at 23:59"
             >
-              <div className="flex flex-col items-center space-y-6">
-                {/* <XCircle className="text-[#FFD700] w-24 h-24" /> */}
-                <h2 className="text-2xl font-bold text-[#FFD700]">Registration Closed</h2>
-                <div className="w-full max-w-md space-y-2">
-                  <p className="text-center text-gray-300">
-                    Follow our Instagram account for the latest news and announcements.
-                  </p>
-                  <Button
-                    className="w-full bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
-                    onClick={() => window.open('https://www.instagram.com/interfest_if', '_blank')}
-                  >
-                    Follow on Instagram
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
+              {batch1Active ? batch1Countdown : currentDate < batch1StartDate ? 'Starts soon' : 'Batch ended'}
+            </p>
+
+            <style jsx>{`
+              .tooltip:hover::after {
+                content: attr(title);
+                position: absolute;
+                bottom: -2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.75);
+                color: #FFD700;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                border-radius: 4px;
+                white-space: nowrap;
+              }
+            `}</style>
           </div>
+
+          <div
+            className={`w-full md:w-1/2 p-6 rounded-lg shadow-lg transition-transform duration-300 ${batch2Active ? 'bg-[#2D1B4E] text-[#FFD700] transform scale-105' : 'bg-[#1E0B3B] text-gray-400 md:block hidden'
+              } hover:shadow-xl`}
+          >
+            <h2 className="text-lg font-semibold mb-1">Batch 2</h2>
+            <p className="text-sm mb-1">Rp65.000,- per team</p>
+            <p className="text-xs mb-2 text-gray-300">3 Nov 2024 - 21 Nov 2024</p>
+
+            <p
+              className="text-sm font-medium tooltip relative"
+              title="Batch 2 will end on 21 Nov 2024 at 23:59"
+            >
+              {batch2Active ? batch2Countdown : currentDate < batch2StartDate ? 'Starts soon' : 'Batch ended'}
+            </p>
+          </div>
+        </div>
+
+
+        <div className="relative flex items-center justify-between my-10 overflow-x-auto">
+  
+          {steps.map((step, index) => (
+            <div key={index} className="flex flex-col items-center z-10 w-1/5">
+              <div
+                className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${currentStep === index
+                  ? 'bg-[#FFD700] text-[#0B0B3B] border-2 border-[#FFA500]'
+                  : currentStep > index
+                    ? 'bg-[#FFA500] text-[#0B0B3B]'
+                    : 'bg-[#2D1B4E] text-gray-300'
+                  }`}
+              >
+                <StepIcon
+                  icon={step.icon}
+                  isActive={currentStep === index}
+                  isCompleted={currentStep > index}
+                />
+              </div>
+              <p
+                className={`mt-2 text-sm font-semibold transition-colors duration-300 ${currentStep === index ? 'text-[#FFD700]' : 'text-gray-400'
+                  }`}
+              >
+                {step.title}
+              </p>
+            </div>
+          ))}
+
+          <div className="absolute top-1/2 left-[10%] right-[10%] h-1 bg-[#2D1B4E] -translate-y-1/2 z-0">
+            <motion.div
+              className="h-full bg-[#FFD700] rounded"
+              initial={{ width: 0 }}
+              animate={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+            />
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6 mt-8">
+          {renderStepContent()}
+          <div className="flex justify-between mt-6">
+            {currentStep == 0 ? (
+              <div></div>
+            ) : (
+              <Button
+                type="button"
+                onClick={handlePrev}
+                disabled={currentStep === 0}
+                className="bg-[#2D1B4E] text-[#FFD700] hover:bg-[#1E0B3B] transition-all duration-300"
+              >
+                Previous
+              </Button>
+            )}
+            {currentStep === steps.length - 1 ? (
+              <Button
+                type="submit"
+                className="bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
+                disabled={!formData.agreeTerms || loading}
+              >
+                {loading ? (
+                  <span className="loader"></span> // Step 4: Show loader
+                ) : (
+                  'Submit Registration'
+                )}
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="bg-[#FFD700] text-[#0B0B3B] hover:bg-[#FFA500] transition-all duration-300"
+              >
+                Next
+              </Button>
+            )}
+          </div>
+        </form>
       </div>
     </div>
   )
